@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - FlickTickets</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        /* We use one container for both login and admin views */
+        .admin-container {
+            background-color: #fff;
+            padding: 2rem 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 450px;
+        }
+        .admin-container h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+        .admin-container .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #222;
+        }
+        .input-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .login-btn, .admin-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+        .login-btn:hover, .admin-btn:hover {
+            background-color: #444;
+        }
+        /* Specific button colors */
+        .admin-btn.movie { background-color: #007bff; }
+        .admin-btn.sport { background-color: #4CAF50; }
+        .admin-btn.event { background-color: #ff9800; }
+
+        .admin-btn.movie:hover { background-color: #0056b3; }
+        .admin-btn.sport:hover { background-color: #45a049; }
+        .admin-btn.event:hover { background-color: #e68900; }
+
+        #error-message, #form-message {
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+            font-weight: bold;
+        }
+        #error-message { color: red; }
+        #form-message.success { color: green; }
+        #form-message.error { color: red; }
+
+        
+        /* This is the view that is hidden by default */
+        #admin-dashboard {
+            display: none;
+        }
+
+        #form-container {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+        #form-container h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- This container holds both views -->
+    <div class="admin-container">
+
+        <!-- VIEW 1: LOGIN (Visible by default) -->
+        <div id="login-view">
+            <div class="logo">🎟️ FlickTickets Admin</div>
+            <h1>Admin Login</h1>
+            
+            <form id="admin-login-form">
+                <div class="input-group">
+                    <label for="admin-username">Username</label>
+                    <input type="text" id="admin-username" required>
+                </div>
+                <div class="input-group">
+                    <label for="admin-password">Password</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+                <p id="error-message">Invalid username or password.</p>
+            </form>
+        </div>
+
+        <!-- VIEW 2: DASHBOARD (Hidden by default) -->
+        <div id="admin-dashboard">
+            <div class="logo">🎟️ FlickTickets Admin</div>
+            <h1>Dashboard</h1>
+            <p>Welcome, <strong>admin1</strong>. What would you like to do?</p>
+            
+            <div class="button-grid">
+                <button class="admin-btn movie" onclick="showAddForm('Movie')">Add New Movie</button>
+                <button class="admin-btn sport" onclick="showAddForm('Sport')">Add New Sport</button>
+                <button class="admin-btn event" onclick="showAddForm('Event')">Add New Event</button>
+            </div>
+
+            <!-- This is where the "Add" forms will appear -->
+            <div id="form-container">
+                <!-- JS will fill this -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- 1. LOGIN SCRIPT ---
+        
+        const loginForm = document.getElementById('admin-login-form');
+        
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault(); 
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            if (username === 'admin1' && password === 'pw') {
+                document.getElementById('login-view').style.display = 'none';
+                document.getElementById('admin-dashboard').style.display = 'block';
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // --- 2. DASHBOARD SCRIPT (NOW WITH FETCH!) ---
+        
+        const formContainer = document.getElementById('form-container');
+
+        // This function dynamically builds a form
+        function showAddForm(type) {
+            
+            let formHtml = `<h2>Add New ${type}</h2>`;
+            let apiEndpoint = '';
+            let formId = '';
+
+            if (type === 'Movie') {
+                apiEndpoint = '/api/add/movie';
+                formId = 'add-movie-form';
+                formHtml += `
+                    <form id="${formId}">
+                        <div class="input-group">
+                            <label for="title">Movie Title</label>
+                            <input type="text" id="title" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="summary">Summary</label>
+                            <textarea id="summary" rows="3"></textarea>
+                        </div>
+                        <div class="input-group">
+                            <label for="language">Language</label>
+                            <select id="language">
+                                <option value="English">English</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="Telugu">Telugu</option>
+                                <option value="Kannada">Kannada</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="imageUrl">Image URL</label>
+                            <input type="text" id="imageUrl" placeholder="/components/movies portable/poster_new.jpg">
+                        </div>
+                        <button type="submit" class="admin-btn movie">Save Movie</button>
+                    </form>
+                `;
+            } else if (type === 'Sport') {
+                apiEndpoint = '/api/add/sport';
+                formId = 'add-sport-form';
+                formHtml += `
+                    <form id="${formId}">
+                        <div class="input-group">
+                            <label for="team1">Team 1 (or Name)</label>
+                            <input type="text" id="team1" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="team2">Team 2 (Optional)</label>
+                            <input type="text" id="team2">
+                        </div>
+                        <div class="input-group">
+                            <label for="category">Category</label>
+                            <select id="category">
+                                <option value="C">Cricket</option>
+                                <option value="R">Motorsport</option>
+                                <option value="F">Football</option>
+                                <option value="OTH">Others</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="price">Price</label>
+                            <input type="number" id="price" min="0" value="1000">
+                        </div>
+                        <div class="input-group">
+                            <label for="imageUrl">Image URL</label>
+                            <input type="text" id="imageUrl" placeholder="/flick-tickets-images/flick-tickets-sports/new.jpg">
+                        </div>
+                        <button type="submit" class="admin-btn sport">Save Sport</button>
+                    </form>
+                `;
+            } else if (type === 'Event') {
+                apiEndpoint = '/api/add/event';
+                formId = 'add-event-form';
+                formHtml += `
+                    <form id="${formId}">
+                        <div class="input-group">
+                            <label for="name">Event Name</label>
+                            <input type="text" id="name" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="category">Category</label>
+                            <select id="category">
+                                <option value="AP">Amusement Park</option>
+                                <option value="SC">Stand-up Comedy</option>
+                                <option value="MC">Concert</option>
+                                <option value_="WS">Workshop</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="price">Price</label>
+                            <input type="number" id="price" min="0" value="500">
+                        </div>
+                        <div class="input-group">
+                            <label for="imageUrl">Image URL</label>
+                            <input type="text" id="imageUrl" placeholder="/flick-ticket-images-2/new-event.jpg">
+                        </div>
+                        <button type="submit" class="admin-btn event">Save Event</button>
+                    </form>
+                `;
+            }
+            
+            // Add a container for success/error messages
+            formHtml += `<p id="form-message"></p>`;
+            formContainer.innerHTML = formHtml;
+            
+            // --- THIS IS THE NEW PART ---
+            // Add a listener to the new form that was just created
+            document.getElementById(formId).addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formMessage = document.getElementById('form-message');
+                formMessage.style.display = 'none';
+
+                let body = {};
+
+                // 1. Get data from the correct form
+                if (type === 'Movie') {
+                    body = {
+                        title: document.getElementById('title').value,
+                        summary: document.getElementById('summary').value,
+                        language: document.getElementById('language').value,
+                        imageUrl: document.getElementById('imageUrl').value
+                    };
+                } else if (type === 'Sport') {
+                    body = {
+                        team1: document.getElementById('team1').value,
+                        team2: document.getElementById('team2').value,
+                        category: document.getElementById('category').value,
+                        price: document.getElementById('price').value,
+                        imageUrl: document.getElementById('imageUrl').value
+                    };
+                } else if (type === 'Event') {
+                    body = {
+                        name: document.getElementById('name').value,
+                        category: document.getElementById('category').value,
+                        price: document.getElementById('price').value,
+                        imageUrl: document.getElementById('imageUrl').value
+                    };
+                }
+
+                try {
+                    // 2. Call the backend API
+                    const response = await fetch(apiEndpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    const result = await response.json();
+
+                    // 3. Show success or error message
+                    if (result.success) {
+                        formMessage.textContent = result.message;
+                        formMessage.className = 'success';
+                        document.getElementById(formId).reset(); // Clear the form
+                    } else {
+                        formMessage.textContent = result.message;
+                        formMessage.className = 'error';
+                    }
+                    formMessage.style.display = 'block';
+
+                } catch (err) {
+                    console.error('Submit error:', err);
+                    formMessage.textContent = 'A network error occurred.';
+                    formMessage.className = 'error';
+                    formMessage.style.display = 'block';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

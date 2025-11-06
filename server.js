@@ -66,17 +66,12 @@ app.post('/api/login', async (req, res) => {
 // --- API Endpoints for Content ---
 
 // --- Sample Data (for testing) ---
-
-// ** FIX: This is now a master list of all venues **
 const sampleVenues = {
-    // Movie Venues
     1: { VenueName: 'PVR Orion Mall', CityName: 'Bengaluru' },
     2: { VenueName: 'INOX Garuda Mall', CityName: 'Bengaluru' },
-    // Event Venues
     3: { VenueName: 'Palace Grounds', CityName: 'Bengaluru' },
     4: { VenueName: 'Central Auditorium', CityName: 'Bengaluru' },
     5: { VenueName: 'Wonderla Amusement Park', CityName: 'Bengaluru' },
-    // Sports Venues
     6: { VenueName: 'Chinnaswamy Stadium', CityName: 'Bengaluru' },
     7: { VenueName: 'Kanteerava Indoor Stadium', CityName: 'Bengaluru' }
 };
@@ -88,17 +83,36 @@ const sampleMovies = [
     { MovieID: 4, Title: 'Kannada Movie', Language: 'Kannada', ImageURL: '/components/movies portable/poster5.jpg', Summary: 'A suspenseful mystery.' }
 ];
 
+// ** THIS IS YOUR NEW HARDCODED SHOWS LIST **
+// It will be used for ANY movie you add via the admin panel.
+const hardcodedShows = [
+    { 
+        ShowID: 9001, // A fake ID so we can book it
+        VenueID: 1, 
+        ScreenInfo: 'Screen 1', 
+        StartTime: '2025-12-01T18:00:00', // 6:00 PM
+        Price: 350.00,
+        VenueName: sampleVenues[1].VenueName, 
+        CityName: sampleVenues[1].CityName
+    },
+    { 
+        ShowID: 9002, // A fake ID
+        VenueID: 2, 
+        ScreenInfo: 'Audi 3', 
+        StartTime: '2025-12-01T21:00:00', // 9:00 PM
+        Price: 400.00,
+        VenueName: sampleVenues[2].VenueName,
+        CityName: sampleVenues[2].CityName
+    }
+];
+
+// This is still used as a fallback if the movie isn't in the DB at all
 const sampleShows = [
-    // Pointing to movie venues (1 & 2)
     { ShowID: 101, MovieID: 1, VenueID: 1, ScreenInfo: 'Screen 1', StartTime: '2025-11-10T18:00:00', Price: 350.00 },
     { ShowID: 102, MovieID: 1, VenueID: 2, ScreenInfo: 'Audi 3', StartTime: '2025-11-10T19:00:00', Price: 400.00 },
-    { ShowID: 103, MovieID: 2, VenueID: 1, ScreenInfo: 'Screen 2', StartTime: '2025-11-10T20:00:00', Price: 350.00 },
-    { ShowID: 104, MovieID: 3, VenueID: 2, ScreenInfo: 'Screen 1', StartTime: '2025-11-11T17:00:00', Price: 450.00 },
-    { ShowID: 105, MovieID: 4, VenueID: 1, ScreenInfo: 'Screen 5', StartTime: '2025-11-11T21:00:00', Price: 300.00 },
 ];
 
 const sampleEvents = [
-    // Pointing to event venues (3, 4, 5)
     { EventID: 1, Name: 'Amusement Park', Category: 'AP', ImageURL: '/flick-ticket-images-2/events-amusement-park2.png', Price: 750.00, StartTime: '2025-11-15T10:00:00', VenueID: 5 },
     { EventID: 2, Name: 'Stand-up Comedy', Category: 'SC', ImageURL: '/flick-ticket-images-2/events-comedy1.png', Price: 1200.00, StartTime: '2025-11-20T19:00:00', VenueID: 4 },
     { EventID: 3, Name: 'Concert', Category: 'MC', ImageURL: '/flick-ticket-images-2/events-music-1.jpg', Price: 2500.00, StartTime: '2025-11-25T20:00:00', VenueID: 3 },
@@ -106,9 +120,8 @@ const sampleEvents = [
 ];
 
 const sampleSports = [
-    // Pointing to sports venues (6, 7)
     { MatchID: 1, Team1ID: 'India', Team2ID: 'Australia', Category: 'C', ImageURL: '/flick-tickets-images/flick-tickets-sports/sports1.jpg', Price: 2000.00, StartTime: '2025-11-28T14:00:00', VenueID: 6 },
-    { MatchID: 2, Team1ID: 'F1 Grand Prix', Team2ID: 'Main Event', Category: 'R', ImageURL: '/flick-tickets-images/flick-tickets-sports/sports2.jpg', Price: 5000.00, StartTime: '2025-11-29T12:00:00', VenueID: 6 }, // Re-using stadium
+    { MatchID: 2, Team1ID: 'F1 Grand Prix', Team2ID: 'Main Event', Category: 'R', ImageURL: '/flick-tickets-images/flick-tickets-sports/sports2.jpg', Price: 5000.00, StartTime: '2025-11-29T12:00:00', VenueID: 6 }, 
     { MatchID: 3, Team1ID: 'Man United', Team2ID: 'Chelsea', Category: 'F', ImageURL: '/flick-tickets-images/flick-tickets-sports/sports7.jpg', Price: 3000.00, StartTime: '2025-11-30T20:00:00', VenueID: 7 },
     { MatchID: 4, Team1ID: 'Pro Kabaddi', Team2ID: 'Finals', Category: 'OTH', ImageURL: '/flick-tickets-images/flick-tickets-sports/sports5.jpg', Price: 800.00, StartTime: '2025-12-02T19:00:00', VenueID: 7 }
 ];
@@ -153,7 +166,6 @@ app.get('/api/events', async (req, res) => {
     }
 });
 
-// GET single EVENT details
 app.get('/api/event-details/:id', async (req, res) => {
     try {
         const eventId = req.params.id;
@@ -188,41 +200,39 @@ app.get('/api/event-details/:id', async (req, res) => {
     }
 });
 
-// GET single MOVIE details
+// --- THIS IS THE CORRECTED /api/movie-details/:id ENDPOINT ---
 app.get('/api/movie-details/:id', async (req, res) => {
     try {
         const movieId = req.params.id;
+
+        // Query 1: Get the movie's main info
         const movieSql = "SELECT * FROM Movie WHERE MovieID = ?";
         const [movieRows] = await pool.query(movieSql, [movieId]);
-        const showsSql = `
-            SELECT 
-                s.ShowID, s.ScreenInfo, s.StartTime, s.Price,
-                v.Name as VenueName,
-                c.Name as CityName
-            FROM Shows s
-            JOIN Venue v ON s.VenueID = v.VenueID
-            JOIN City c ON v.CityID = c.CityID
-            WHERE s.MovieID = ?
-        `;
-        const [showsRows] = await pool.query(showsSql, [movieId]);
 
+        // Check if the REAL movie was found
         if (movieRows.length > 0) {
+            // REAL MOVIE FOUND! (e.g., "KGF")
+            const movie = movieRows[0];
+            
+            // **THIS IS THE NEW LOGIC**
+            // Instead of querying the 'Shows' table, just send the hardcoded list.
             return res.status(200).json({ 
                 success: true, 
                 data: {
-                    movie: movieRows[0],
-                    shows: showsRows
+                    movie: movie,
+                    shows: hardcodedShows // Send the hardcoded shows
                 } 
             });
         }
 
-        // Fallback to sample data
+        // **Fallback to sample data**
+        // This code will now *only* run if the movie ID was not in the database.
         const movie = sampleMovies.find(m => m.MovieID == movieId);
         if (movie) {
             const shows = sampleShows
                 .filter(s => s.MovieID == movieId)
                 .map(show => {
-                    const venue = sampleVenues[show.VenueID] || { VenueName: 'TBC', CityName: 'TBC' }; // Fallback
+                    const venue = sampleVenues[show.VenueID] || { VenueName: 'TBC', CityName: 'TBC' };
                     return {
                         ...show,
                         VenueName: venue.VenueName,
@@ -238,14 +248,16 @@ app.get('/api/movie-details/:id', async (req, res) => {
                 }
             });
         }
+
+        // Not found in DB or samples.
         res.status(404).json({ success: false, message: 'Movie not found.' });
+
     } catch (error) {
         console.error('Error fetching movie details:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch movie details.' });
     }
 });
 
-// GET single SPORT details
 app.get('/api/sport-details/:id', async (req, res) => {
     try {
         const matchId = req.params.id;
@@ -268,7 +280,7 @@ app.get('/api/sport-details/:id', async (req, res) => {
         // Fallback to sample data
         const match = sampleSports.find(s => s.MatchID == matchId);
         if (match) {
-            const venue = sampleVenues[match.VenueID] || { VenueName: 'TBC', CityName: 'TBC' }; // Fallback
+            const venue = sampleVenues[match.VenueID] || { VenueName: 'TBC', CityName: 'TBC' }; 
             const matchDetails = {
                 Team1ID: match.Team1ID,
                 Team2ID: match.Team2ID,
@@ -288,24 +300,20 @@ app.get('/api/sport-details/:id', async (req, res) => {
     }
 });
 
-// API ENDPOINT FOR BOOKING
 app.post('/api/book', async (req, res) => {
     try {
         const { username, bookingDetails } = req.body;
         if (!username || !bookingDetails) {
             return res.status(400).json({ success: false, message: 'Missing booking information.' });
         }
-        const userSql = "SELECT UserID FROM Users WHERE Username = ?";
-        const [users] = await pool.query(userSql, [username]);
-        if (users.length === 0) {
-            return res.status(404).json({ success: false, message: 'User not found.' });
-        }
-        const userId = users[0].UserID;
         const { type, id, tickets, totalPrice } = bookingDetails;
         const categoryChar = type.charAt(0);
-        const bookingSql = "INSERT INTO Booking (UserID, category, catId, NoOfTickets, TotalPrice) VALUES (?, ?, ?, ?, ?)";
-        await pool.query(bookingSql, [userId, categoryChar, id, tickets, totalPrice]);
-        console.log(`New booking created for UserID ${userId}: ${tickets} ticket(s) for ${type} ID ${id}`);
+        
+        // Call the Stored Procedure
+        const sql = "CALL sp_CreateBooking(?, ?, ?, ?, ?)";
+        await pool.query(sql, [username, categoryChar, id, tickets, totalPrice]);
+
+        console.log(`New booking created via procedure for ${username}: ${tickets} ticket(s) for ${type} ID ${id}`);
         res.status(201).json({ success: true, message: 'Booking successful!' });
     } catch (error)
     {
@@ -313,6 +321,94 @@ app.post('/api/book', async (req, res) => {
         res.status(500).json({ success: false, message: 'An error occurred during booking.' });
     }
 });
+
+app.get('/api/my-profile', async (req, res) => {
+    try {
+        const { username } = req.query;
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'Username is required.' });
+        }
+        const userSql = "SELECT Name, Email, Phone, Username FROM Users WHERE Username = ?";
+        const [userRows] = await pool.query(userSql, [username]);
+        if (userRows.length === 0) {
+            return res.status(404).json({ success: false, message: 'User not found.' });
+        }
+        const bookingSql = `
+            SELECT 
+                BookingID, 
+                NoOfTickets, 
+                TotalPrice, 
+                BookingTime, 
+                fn_GetItemName(category, catId) AS ItemName
+            FROM Booking b
+            JOIN Users u ON b.UserID = u.UserID
+            WHERE u.Username = ?
+            ORDER BY b.BookingTime DESC
+        `;
+        const [bookingRows] = await pool.query(bookingSql, [username]);
+        res.status(200).json({
+            success: true,
+            data: {
+                userDetails: userRows[0],
+                bookingHistory: bookingRows
+            }
+        });
+    } catch (error) {
+        console.error('My Profile error:', error);
+        res.status(500).json({ success: false, message: 'An error occurred fetching profile data.' });
+    }
+});
+
+// --- Admin API Endpoints ---
+
+app.post('/api/add/movie', async (req, res) => {
+    try {
+        const { title, summary, language, imageUrl } = req.body;
+        if (!title || !language) {
+            return res.status(400).json({ success: false, message: 'Title and Language are required.' });
+        }
+        const sql = "INSERT INTO Movie (Title, Summary, Language, ImageURL) VALUES (?, ?, ?, ?)";
+        await pool.query(sql, [title, summary, language, imageUrl]);
+        console.log(`ADMIN: New movie added: ${title}`);
+        res.status(201).json({ success: true, message: 'Movie added successfully!' });
+    } catch (error) {
+        console.error('Admin add movie error:', error);
+        res.status(500).json({ success: false, message: 'Failed to add movie.' });
+    }
+});
+
+app.post('/api/add/sport', async (req, res) => {
+    try {
+        const { team1, team2, price, imageUrl, category } = req.body;
+        if (!team1) {
+            return res.status(400).json({ success: false, message: 'Team 1 is required.' });
+        }
+        const sql = "INSERT INTO SportsMatch (Team1ID, Team2ID, Price, ImageURL, Category) VALUES (?, ?, ?, ?, ?)";
+        await pool.query(sql, [team1, team2, price, imageUrl, category]);
+        console.log(`ADMIN: New sport added: ${team1} vs ${team2}`);
+        res.status(201).json({ success: true, message: 'Sport added successfully!' });
+    } catch (error) {
+        console.error('Admin add sport error:', error);
+        res.status(500).json({ success: false, message: 'Failed to add sport.' });
+    }
+});
+
+app.post('/api/add/event', async (req, res) => {
+    try {
+        const { name, category, price, imageUrl } = req.body;
+        if (!name || !category) {
+            return res.status(400).json({ success: false, message: 'Name and Category are required.' });
+        }
+        const sql = "INSERT INTO Events (Name, Category, Price, ImageURL) VALUES (?, ?, ?, ?)";
+        await pool.query(sql, [name, category, price, imageUrl]);
+        console.log(`ADMIN: New event added: ${name}`);
+        res.status(201).json({ success: true, message: 'Event added successfully!' });
+    } catch (error) {
+        console.error('Admin add event error:', error);
+        res.status(500).json({ success: false, message: 'Failed to add event.' });
+    }
+});
+
 
 // --- Start the Server ---
 app.listen(PORT, () => {

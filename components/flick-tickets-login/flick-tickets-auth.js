@@ -18,53 +18,52 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchIcon = document.createElement('span');
         searchIcon.textContent = '🔍';
         searchIcon.style.cursor = 'pointer';
-        // You can add a click event here for search if you want
-        // searchIcon.onclick = () => { alert('Search clicked!'); };
 
         // 3. Create "Hi, [username]" text
         const welcomeText = document.createElement('span');
         welcomeText.textContent = `Hi, ${username}`;
-        // Apply styles to match your other header links
         welcomeText.style.color = '#fff';
         welcomeText.style.fontWeight = '500';
         welcomeText.style.margin = '0 0.5rem';
 
-        // 4. Create a "Logout" link
+        // 4. *** NEW "My Profile" LINK ***
+        const profileLink = document.createElement('a');
+        profileLink.textContent = 'My Profile';
+        // This path is root-relative, assuming you'll save my-profile.html in the login folder
+        profileLink.href = '/components/flick-tickets-login/my-profile.html';
+        profileLink.style.color = '#fff';
+        profileLink.style.fontWeight = '500';
+        profileLink.style.margin = '0 0.5rem';
+        profileLink.style.textDecoration = 'underline';
+
+        // 5. Create a "Logout" link
         const logoutLink = document.createElement('a');
         logoutLink.textContent = 'Logout';
         logoutLink.href = '#';
-        // Apply styles to match your other header links
         logoutLink.style.color = '#fff';
         logoutLink.style.fontWeight = '500';
         logoutLink.style.margin = '0 0.5rem';
         logoutLink.style.textDecoration = 'underline';
         
-        // 5. Add the click event to log out
+        // 6. Add the click event to log out
         logoutLink.onclick = (e) => {
             e.preventDefault(); // Stop link from jumping
-            
-            // Clear the login status
             localStorage.removeItem('isLoggedIn');
             localStorage.removeItem('username');
-            
-            // Reload the page to reset the state
             window.location.reload();
         };
 
-        // 6. Re-create the Menu icon
+        // 7. Re-create the Menu icon
         const menuIcon = document.createElement('span');
         menuIcon.textContent = '☰';
         menuIcon.style.cursor = 'pointer';
-        // You can add a click event for the menu here
-        // menuIcon.onclick = () => { alert('Menu clicked!'); };
 
-        // 7. Add all the new elements back to the container
+        // 8. Add all the new elements back to the container
         //    in the correct order
         iconsContainer.appendChild(searchIcon);
         iconsContainer.appendChild(welcomeText);
+        iconsContainer.appendChild(profileLink); // <-- ADDED
         iconsContainer.appendChild(logoutLink);
         iconsContainer.appendChild(menuIcon);
     }
-    // If not logged in, the script does nothing, and the
-    // default HTML (🔍, 👤, ☰) from your .html file is used.
 });
