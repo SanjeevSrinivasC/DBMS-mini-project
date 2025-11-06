@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Successful!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .success-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            padding: 3rem 2.5rem;
+        }
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            background-color: #4CAF50;
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        /* Simple CSS Checkmark */
+        .checkmark::after {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 15px;
+            width: 20px;
+            height: 40px;
+            border: solid white;
+            border-width: 0 6px 6px 0;
+            transform: rotate(45deg);
+        }
+        h1 {
+            color: #333;
+            margin: 0 0 1rem 0;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .home-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #222;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .home-btn:hover {
+            background-color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="checkmark"></div>
+        <h1>Booking Successful!</h1>
+        <p>Your tickets are confirmed. We've sent a confirmation to your email and (soon) to your profile page!</p>
+        
+        <!-- 
+          THIS IS THE FIX:
+          The href path starts with a '/' and goes to the full, correct
+          URL path for your homepage.
+        -->
+        <a href="/components/flick-tickets-homepage/flick-tickets-home.html" class="home-btn">
+            Back to Home
+        </a>
+    </div>
+</body>
+</html>

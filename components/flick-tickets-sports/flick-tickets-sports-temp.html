@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Selection</title>
+    
+    <style>
+        /* These are the exact styles from your events.html file */
+        body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; background-color: #f4f4f9; }
+        h1 { color: #333; margin-top: 20px; }
+        .filter-container { margin: 20px; }
+        .filter-button { padding: 10px 20px; font-size: 1em; border-radius: 5px; border: 1px solid #ccc; background-color: #fff; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); cursor: pointer; transition: all 0.3s ease; margin: 0 10px; }
+        .filter-button.active { background-color: #4CAF50; color: #fff; }
+
+        .movie-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; max-width: 900px; margin: 0 auto; padding: 20px; }
+        
+        .movie-button {
+            width: 168px; /* Using your fixed width */
+            height: 200px;
+            background-color: #ddd;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .movie-button:hover { transform: scale(1.05); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); }
+
+        .header { box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .logo a { color: inherit; text-decoration: none; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
+        .icons { display: flex; align-items: center; }
+        .icons span { margin-left: 1rem; cursor: pointer; }
+        
+        .footer { box-sizing: border-box; margin-top: 35px; width: 100%; padding: 1rem; background-color: #222; color: #fff; text-align: center; }
+        .footer nav a { color: #aaa; text-decoration: none; margin: 0 0.5rem; }
+        .footer nav a:hover { color: #fff; }
+    </style>
+    <script>
+        // This is your original filter script
+        const selectedLanguages = new Set();
+        function filterMovies(language) {
+            const movies = document.querySelectorAll(".movie-button");
+            const languageButton = document.querySelector(`.filter-button[data-language="${language}"]`);
+            if (selectedLanguages.has(language)) {
+                selectedLanguages.delete(language);
+                languageButton.classList.remove('active');
+            } else {
+                selectedLanguages.add(language);
+                languageButton.classList.add('active');
+            }
+            movies.forEach(movie => {
+                const movieLanguage = movie.getAttribute("data-language");
+                movie.style.display = (selectedLanguages.size === 0 || selectedLanguages.has(movieLanguage)) ? "block" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">
+            <!-- FIX: Correct path to homepage -->
+            <a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
+        </div>
+        <nav class="nav">
+            <!-- FIX: Correct paths -->
+            <a href="/components/movies portable/MOVIES1.html">Movies</a>
+            <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+            <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
+        </nav>
+        <div class="icons">
+            <span>🔍</span>
+            <!-- FIX: Correct path -->
+            <a href="/components/flick-tickets-login/flick-tickets-login.html" id="user-icon-link">
+                <span>👤</span>
+            </a>
+            <span>☰</span>
+        </div>
+    </header>
+    
+    <h1>Sports Selection</h1>
+    
+    <div class="filter-container">
+        <!-- These are your filter buttons from your old code -->
+        <button class="filter-button" data-language="C" onclick="filterMovies('C')">Cricket</button>
+        <button class="filter-button" data-language="R" onclick="filterMovies('R')">Motorsport</button>
+        <button class="filter-button" data-language="T" onclick="filterMovies('T')">Tennis</button>
+        <button class="filter-button" data-language="F" onclick="filterMovies('F')">Football</button>
+        <button class="filter-button" data-language="OTH" onclick="filterMovies('OTH')">Others</button>
+    </div>
+
+    <!-- 
+      FIX: This grid is now EMPTY. The new script below will fill it.
+    -->
+    <div class="movie-grid">
+        <!-- The JavaScript will add sports posters here... -->
+    </div>
+
+    <footer class="footer">
+        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+        <nav>
+          <a href="#">Home</a> | <a href="#">About Us</a> | <a href="#">Terms & Conditions</a> | <a href="#">FAQ</a> | <a href="#">Contact Us</a>
+        </nav>
+    </footer>
+
+    <!-- Auth script (checks for login) -->
+    <script src="/components/flick-tickets-login/flick-tickets-auth.js"></script>
+    
+    <!-- 
+      === NEW SCRIPT ===
+      This script will run, fetch data from your /api/sports,
+      and build the grid of sports posters.
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.querySelector('.movie-grid');
+            
+            try {
+                // 1. Call the /api/sports endpoint
+                const response = await fetch('/api/sports');
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    grid.innerHTML = '';
+                    
+                    // 2. Loop through each match and create a button
+                    result.data.forEach(match => {
+                        const button = document.createElement('button');
+                        button.className = 'movie-button';
+                        
+                        // Set the category from the database (for your filter)
+                        button.setAttribute('data-language', match.Category || 'OTH'); 
+                        
+                        // Set the background image
+                        let imageUrl = match.ImageURL || 'https://placehold.co/168x200/222/fff?text=' + match.Team1ID;
+                        button.style.backgroundImage = `url('${imageUrl}')`;
+
+                        // When we click, go to the details page
+                        button.onclick = () => {
+                            // We will build this page next
+                            window.location.href = `sport-details.html?id=${match.MatchID}`;
+                        };
+                        grid.appendChild(button);
+                    });
+                } else {
+                    grid.innerHTML = '<p>No sports matches found.</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load sports:', error);
+                grid.innerHTML = '<p>Error loading sports. Please try again.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

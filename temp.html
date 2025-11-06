@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Selection</title>
+    
+    <!-- Your existing CSS link -->
+    <link rel="stylesheet" href="flick-tickets-events.css">
+    
+    <!-- This is the CSS for the Header. 
+         Based on your structure, you might need a separate CSS file for it.
+         For now, I'll paste the styles from your other page here.
+    -->
+    <style>
+        /* Basic styling for layout */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        h1 { color: #333; margin-top: 20px; }
+        .filter-container { margin: 20px; }
+        /* Style the filter buttons */
+        .filter-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 10px;
+        }
+        .filter-button.active { background-color: #4CAF50; color: #fff; }
+
+        /* Grid */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .movie-button {
+            width: 168px; 
+            height: 200px;
+            background-color: #ddd;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .movie-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header CSS */
+        .header {
+            box-sizing: border-box; 
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #222;
+            color: #fff;
+        }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .logo a { color: inherit; text-decoration: none; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
+        .icons { display: flex; align-items: center; }
+        .icons span { margin-left: 1rem; cursor: pointer; }
+        
+        /* Footer CSS */
+        .footer {
+            box-sizing: border-box;
+            margin-top: 35px;
+            width: 100%;
+            padding: 1rem;
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+        }
+        .footer nav a { color: #aaa; text-decoration: none; margin: 0 0.5rem; }
+        .footer nav a:hover { color: #fff; }
+    </style>
+    
+    <!-- This is your old filter script, we can keep it for now -->
+    <script src="flick-tickets-events.js"></script>
+</head>
+<body>
+    
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <!-- This path goes up two levels to the homepage -->
+            <a href="../../components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
+        </div>
+        <nav class="nav">
+            <!-- These paths go up one level, then into the correct folder -->
+            <a href="../movies portable/MOVIES1.html">Movies</a>
+            <a href="../flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+            <a href="flick-tickets-events.html">Events</a> <!-- This is the current page -->
+        </nav>
+        <div class="icons">
+            <span>🔍</span>
+            <!-- This link goes up one level, then into the login folder -->
+            <a href="../flick-tickets-login/flick-tickets-login.html" id="user-icon-link">
+                <span>👤</span>
+            </a>
+            <span>☰</span>
+        </div>
+    </header>
+    
+    <h1>Event Selection</h1>
+    
+    <div class="filter-container">
+        <!-- These buttons will be used by your .js file -->
+        <button class="filter-button" data-language="AP" onclick="filterMovies('AP')">Amusement Park</button>
+        <button class="filter-button" data-language="SC" onclick="filterMovies('SC')">Stand-up Comedy</button>
+        <button class="filter-button" data-language="MC" onclick="filterMovies('MC')">Concerts</button>
+        <button class="filter-button" data-language="WS" onclick="filterMovies('WS')">Workshops</button>
+    </div>
+
+    <!-- 
+      This is the container where the events will be added.
+      It is EMPTY now, the script will fill it.
+    -->
+    <div class="movie-grid">
+        <!-- The JavaScript will add event buttons here... -->
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+        <nav>
+          <a href="#">Home</a> |
+          <a href="#">About Us</a> |
+          <a href="#">Terms & Conditions</a> |
+          <a href="#">FAQ</a> |
+          <a href="#">Contact Us</a>
+        </nav>
+    </footer>
+
+    <!-- This script checks if the user is logged in -->
+    <!-- It goes up one level, then into the login folder -->
+    <script src="../flick-tickets-login/flick-tickets-auth.js"></script>
+    
+    <!-- 
+      === NEW SCRIPT ===
+      This script will run, fetch data from your /api/events,
+      and build the grid of event buttons.
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const grid = document.querySelector('.movie-grid');
+            
+            try {
+                // 1. Call the API endpoint from server.js
+                const response = await fetch('/api/events');
+                const result = await response.json();
+
+                if (result.success && result.data.length > 0) {
+                    // 2. Clear the grid (in case there's anything in it)
+                    grid.innerHTML = '';
+                    
+                    // 3. Loop through each event and create a button
+                    result.data.forEach(event => {
+                        const button = document.createElement('button');
+                        button.className = 'movie-button';
+                        
+                        // Set the category from the database
+                        button.setAttribute('data-language', event.Category); 
+                        
+                        // Set the background image
+                        // We need an ImageURL column in the Events table for this
+                        // For now, I'll use the sample URL or a placeholder
+                        let imageUrl = event.ImageURL || 'https://placehold.co/168x200/222/fff?text=' + event.Name;
+                        button.style.backgroundImage = `url('${imageUrl}')`;
+
+                        // When we click, go to the details page (This is for Part 2)
+                        button.onclick = () => {
+                            // We will build this page next
+                            window.location.href = `event-details.html?id=${event.EventID}`;
+                        };
+
+                        // Add the new button to the grid
+                        grid.appendChild(button);
+                    });
+                } else {
+                    grid.innerHTML = '<p>No events found.</p>';
+                }
+            } catch (error) {
+                console.error('Failed to load events:', error);
+                grid.innerHTML = '<p>Error loading events. Please try again.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

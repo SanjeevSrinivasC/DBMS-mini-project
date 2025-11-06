@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - FlickTickets</title>
+    <style>
+        /* This is the same CSS from your login page for a consistent look */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Use min-height to handle long forms */
+            margin: 0;
+            padding: 2rem 0; /* Add padding for small screens */
+        }
+        .signup-container {
+            background-color: #fff;
+            padding: 2rem 3rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 380px;
+        }
+        .signup-container h1 { color: #333; margin-bottom: 1.5rem; }
+        .signup-container .logo { font-size: 1.8rem; font-weight: bold; margin-bottom: 1.5rem; color: #222; }
+        .input-group { margin-bottom: 1.25rem; text-align: left; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #555; }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box; 
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .signup-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: #222;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .signup-btn:hover { background-color: #444; }
+        
+        /* This is for showing success or error messages */
+        #message {
+            margin-top: 1rem;
+            display: none; /* Hidden by default */
+            font-weight: bold;
+        }
+        #message.success { color: green; }
+        #message.error { color: red; }
+        
+        .bottom-link { margin-top: 1.5rem; font-size: 0.9rem; color: #555; }
+        .bottom-link a { color: #222; font-weight: bold; text-decoration: none; }
+        .bottom-link a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="logo">🎟️ FlickTickets</div>
+        <h1>Create Account</h1>
+        
+        <form id="signup-form">
+            
+            <!-- Added 'Name' field, which is required by your database -->
+            <div class="input-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <!-- Added 'Phone' field, which is optional in your database -->
+            <div class="input-group">
+                <label for="phone">Phone (Optional)</label>
+                <input type="tel" id="phone">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+
+            <div class="input-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" required>
+            </div>
+            
+            <button type="submit" class="signup-btn">Sign Up</button>
+            
+            <!-- Added a <p> tag to show messages from the server -->
+            <p id="message"></p>
+        </form>
+
+        <!-- Fixed path based on your structure -->
+        <p class="bottom-link">Already have an account? <a href="flick-tickets-login.html">Log In</a></p>
+    </div>
+
+    <!-- 
+      Fixed path based on your structure.
+      We are in the 'flick-tickets-login' folder, so the JS file
+      is right next to this HTML file.
+    -->
+    <script src="flick-tickets-signup.js"></script>
+</body>
+</html>

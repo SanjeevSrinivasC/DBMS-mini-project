@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Selection</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const App = () => {
+            const [selectedLanguages, setSelectedLanguages] = React.useState(new Set());
+
+            const toggleLanguage = (language) => {
+                const newSet = new Set(selectedLanguages);
+                if (newSet.has(language)) {
+                    newSet.delete(language);
+                } else {
+                    newSet.add(language);
+                }
+                setSelectedLanguages(newSet);
+            };
+
+            const movies = [
+                { id: 1, language: "C", image: "/flick-tickets-images/flick-tickets-sports/sports1.jpg" },
+                { id: 2, language: "R", image: "/flick-tickets-images/flick-tickets-sports/sports2.jpg" },
+                { id: 3, language: "T", image: "/flick-tickets-images/flick-tickets-sports/sports3.jpg" },
+                { id: 4, language: "C", image: "/flick-tickets-images/flick-tickets-sports/sports4.jpg" },
+                { id: 5, language: "OTH", image: "/flick-tickets-images/flick-tickets-sports/sports5.jpg" },
+                { id: 6, language: "OTH", image: "/flick-tickets-images/flick-tickets-sports/sports6.jpg" },
+                { id: 7, language: "F", image: "/flick-tickets-images/flick-tickets-sports/sports7.jpg" },
+                { id: 8, language: "F", image: "/flick-tickets-images/flick-tickets-sports/sports8.jpg" },
+                { id: 9, language: "R", image: "/flick-tickets-images/flick-tickets-sports/sports9.jpg" },
+                { id: 10, language: "R", image: "/flick-tickets-images/flick-tickets-sports/sports10.jpg" },
+                { id: 11, language: "OTH", image: "/flick-tickets-images/flick-tickets-sports/sports11.jpg" },
+                { id: 12, language: "OTH", image: "/flick-tickets-images/flick-tickets-sports/sports12.jpg" },
+                { id: 13, language: "C", image: "/flick-tickets-images/flick-tickets-sports/sports13.jpg" },
+                { id: 14, language: "C", image: "/flick-tickets-images/flick-tickets-sports/sports14.jpg" },
+                { id: 15, language: "OTH", image: "/flick-tickets-images/flick-tickets-sports/sports15.jpg" }
+            ];
+
+            const filteredMovies = movies.filter(
+                (movie) => selectedLanguages.size === 0 || selectedLanguages.has(movie.language)
+            );
+
+            return (
+                <div>
+                    <header style={styles.header}>
+                        <div style={styles.logo}>🎟️ FlickTickets</div>
+                        <nav style={styles.nav}>
+                            <a href="#" style={styles.navLink}>Movies</a>
+                            <a href="#" style={styles.navLink}>Sports</a>
+                            <a href="#" style={styles.navLink}>Concerts</a>
+                            <a href="#" style={styles.navLink}>Comedy</a>
+                            <a href="#" style={styles.navLink}>Plays</a>
+                        </nav>
+                        <div style={styles.icons}>
+                            <span>🔍</span>
+                            <span>👤</span>
+                            <span>☰</span>
+                        </div>
+                    </header>
+                    <h1 style={styles.title}>Sports Selection</h1>
+                    <div style={styles.filterContainer}>
+                        {["C", "R", "T", "F", "OTH"].map((lang) => (
+                            <button
+                                key={lang}
+                                style={{
+                                    ...styles.filterButton,
+                                    ...(selectedLanguages.has(lang) ? styles.activeFilterButton : {})
+                                }}
+                                onClick={() => toggleLanguage(lang)}
+                            >
+                                {lang === "C" ? "Cricket" : lang === "R" ? "Motorsport" : lang === "T" ? "Tennis" : lang === "F" ? "Football" : "Others"}
+                            </button>
+                        ))}
+                    </div>
+                    <div style={styles.movieGrid}>
+                        {filteredMovies.map((movie) => (
+                            <button
+                                key={movie.id}
+                                style={{
+                                    ...styles.movieButton,
+                                    backgroundImage: `url(${movie.image})`
+                                }}
+                            />
+                        ))}
+                    </div>
+                    <footer style={styles.footer}>
+                        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+                        <nav>
+                            <a href="#" style={styles.footerLink}>Home</a> |
+                            <a href="#" style={styles.footerLink}>About Us</a> |
+                            <a href="#" style={styles.footerLink}>Terms & Conditions</a> |
+                            <a href="#" style={styles.footerLink}>FAQ</a> |
+                            <a href="#" style={styles.footerLink}>Contact Us</a>
+                        </nav>
+                    </footer>
+                </div>
+            );
+        };
+
+        const styles = {
+            header: {
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                padding: "1rem 2rem",
+                backgroundColor: "#222",
+                color: "#fff"
+            },
+            logo: { fontSize: "1.5rem", fontWeight: "bold" },
+            nav: { display: "flex" },
+            navLink: { color: "#fff", textDecoration: "none", margin: "0 0.5rem" },
+            icons: { display: "flex", gap: "1rem" },
+            title: { textAlign: "center", color: "#333" },
+            filterContainer: { textAlign: "center", margin: "20px" },
+            filterButton: {
+                padding: "10px 20px",
+                fontSize: "1em",
+                borderRadius: "5px",
+                border: "1px solid #ccc",
+                backgroundColor: "#fff",
+                margin: "0 10px",
+                cursor: "pointer"
+            },
+            activeFilterButton: { backgroundColor: "#4CAF50", color: "#fff" },
+            movieGrid: {
+                display: "grid",
+                gridTemplateColumns: "repeat(5, 1fr)",
+                gap: "15px",
+                maxWidth: "900px",
+                margin: "0 auto",
+                padding: "20px"
+            },
+            movieButton: {
+                width: "168px",
+                height: "200px",
+                border: "none",
+                borderRadius: "10px",
+                cursor: "pointer",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease"
+            },
+            footer: {
+                marginTop: "35px",
+                width: "100%",
+                padding: "1rem",
+                backgroundColor: "#222",
+                color: "#fff",
+                textAlign: "center"
+            },
+            footerLink: { color: "#aaa", textDecoration: "none", margin: "0 0.5rem" }
+        };
+
+        ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+</body>
+</html>

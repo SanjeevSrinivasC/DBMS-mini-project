@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlickTickets</title>
+  <link rel="stylesheet" href="./flick-tickets-home.css">
+  <script src="./flick-tickets-home.js"></script>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+    <a href="../flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
+    </div>
+    
+    
+    
+    <nav class="nav">
+      <a href="../movies portable/MOVIES1.html">Movies</a>
+      <a href="../flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+      <a href="../flick-tickets-events/flick-tickets-events.html">Events</a>
+    </nav>
+    
+    <div class="icons">
+      <span>🔍</span>
+      <a href="../flick-tickets-login/flick-tickets-login.html" id="user-icon-link">
+        <span>👤</span>
+      </a>
+      <span>☰</span>
+    </div>
+  </header>
+
+  
+  <script src="../flick-tickets-login/flcik-tickets-login.js"></script>
+
+  <section class="carousel">
+    <div class="slideshow-container">
+        <div class="slide fade">
+          <img src="/flick-tickets-images/venom-movie.png" alt="Venom: The Last Dance">
+          <div class="caption">The Joker</div>
+        </div>
+        <div class="slide fade">
+          <img src="/flick-tickets-images/the-wild-robot-movie.jpeg" alt="Walker Event">
+          <div class="caption">Walker Event in Hyderabad</div>
+        </div>
+        <div class="slide fade">
+          <img src="/flick-tickets-images/the-jungle-book.jpg" alt="Dev Movie">
+          <div class="caption">Dev Movie</div>
+        </div>
+      
+        <!-- Navigation buttons -->
+        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    </div>
+      
+      <!-- Optional: Dots for slide indicators -->
+    
+      <div class="dot-block">
+        <div class="dots">
+            <span class="dot" onclick="setSlide(1)"></span> 
+            <span class="dot" onclick="setSlide(2)"></span> 
+            <span class="dot" onclick="setSlide(3)"></span> 
+        </div>
+    </div>   
+     
+  </section>
+
+  <section class="categories">
+    
+        <div class="category">
+            <a href="../movies portable/MOVIES1.html">
+                <img src="/flick-tickets-images/movie-logo.jpg" alt="Movies">
+            </a>    
+                <p>MOVIES</p>
+            
+        </div>
+        
+        <div class="category">
+            <a href="../flick-tickets-sports/flick-tickets-sports-temp.html">
+                <img src="/flick-tickets-images/sports-logo.png" alt="Sports">
+            </a>
+                <p>SPORTS</p>
+            
+        </div>
+        
+        <div class="category">
+            <a href="../flick-tickets-events/flick-tickets-events.html">
+                <img src="/flick-tickets-images/music-logo.png" alt="Events">
+            </a>
+                <p>EVENTS</p>
+            
+        </div>
+        
+    </section>
+
+  <footer class="footer">
+    <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+    <nav>
+      <a href="#">Home</a> |
+      <a href="#">About Us</a> |
+      <a href="#">Terms & Conditions</a> |
+      <a href="#">FAQ</a> |
+      <a href="#">Contact Us</a>
+    </nav>
+  </footer>
+  <script src="../flick-tickets-login/flick-tickets-auth.js"></script>
+</body>
+</html>

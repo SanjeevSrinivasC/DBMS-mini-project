@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlickTickets</title>
+    <style>
+          * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #f4f4f4;
+      color: #333;
+      margin: 0;
+    }
+
+    /* Header */
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background-color: #222;
+      color: #fff;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: inherit;
+    padding: 0.5rem;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+    .icon-btn:hover {
+        transform: scale(1.2);
+        color: #4CAF50; /* Highlight color on hover */
+    }
+
+    .icons a {
+        text-decoration: none;
+    }
+
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+
+    .nav a:hover {
+      color: #4CAF50;
+    }
+
+    .icons span {
+      margin-left: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .icons span:hover {
+      transform: scale(1.2);
+    }
+
+    .search-section {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .search-bar {
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .search-bar:focus {
+      box-shadow: 0 0 8px #4CAF50;
+    }
+
+    /* Carousel */
+    .carousel {
+      position: relative;
+      width: 90%;
+      max-width: 1000px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .carousel-images {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .carousel img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 50%;
+      z-index: 1000;
+      transition: background-color 0.3s ease;
+    }
+
+    .prev:hover, .next:hover {
+      background-color: #4CAF50;
+    }
+
+    .prev {
+      left: 15px;
+    }
+
+    .next {
+      right: 15px;
+    }
+
+    /* Categories */
+    .categories {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .category {
+      text-align: center;
+      margin: 10px 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .category:hover {
+      transform: scale(1.1);
+    }
+
+    .category img {
+      width: 60px;
+      margin-bottom: 10px;
+    }
+
+    .category span {
+      font-size: 1rem;
+      color: #222;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 40px;
+      width: 100%;
+      padding: 1.5rem;
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .footer nav {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .footer nav a {
+      color: #aaa;
+      text-decoration: none;
+      margin: 0 1rem;
+      transition: color 0.3s ease;
+    }
+
+    .footer nav a:hover {
+      color: #fff;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header {
+          flex-direction: column;
+          align-items: flex-start;
+      }
+
+      .search-bar {
+          width: 90%;
+          margin-top: 10px;
+      }
+
+      .carousel {
+          width: 100%;
+      }
+
+      .nav {
+          flex-wrap: wrap;
+      }
+
+      .nav a {
+          margin: 0.5rem 0.5rem;
+      }
+
+      .categories {
+          flex-direction: column;
+      }
+
+      .category {
+          margin: 10px 0;
+      }
+    }
+
+    /* Dropdown container */
+      .dropdown {
+          position: relative;
+          display: inline-block;
+      }
+
+      /* Dropdown button */
+      .dropdown-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 1.5rem;
+          color: inherit;
+          padding: 0.5rem;
+          transition: transform 0.3s ease, color 0.3s ease;
+      }
+
+      .dropdown-btn:hover {
+          transform: scale(1.2);
+          color: #4CAF50; /* Highlight color on hover */
+      }
+
+      /* Dropdown content */
+      .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #fff;
+          min-width: 100px;
+          box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+          z-index: 1;
+          text-align: center;
+          border-radius: 5px;
+      }
+
+      .dropdown-content a {
+          color: #333;
+          padding: 10px 15px;
+          text-decoration: none;
+          display: block;
+          font-size: 1rem;
+          transition: background-color 0.3s ease;
+      }
+
+      .dropdown-content a:hover {
+          background-color: #4CAF50;
+          color: white;
+      }
+
+      /* Show dropdown on hover or button click */
+      .dropdown:hover .dropdown-content {
+          display: block;
+      }
+
+    </style>
+
+    <script>
+        const carouselImages = document.querySelector('.carousel-images');
+        const images = document.querySelectorAll('.carousel img');
+        let index = 0;
+        const intervalTime = 3000; // Time in milliseconds (3000ms = 3 seconds)
+
+        // Function to update the carousel position
+        function updateCarousel() {
+            carouselImages.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        // Function to go to the next image
+        function nextImage() {
+            index = (index + 1) % images.length;
+            updateCarousel();
+        }
+
+        // Set up an automatic loop for the carousel
+        let autoSlide = setInterval(nextImage, intervalTime);
+
+        // Event listeners for manual controls
+        document.querySelector('.next').addEventListener('click', () => {
+            clearInterval(autoSlide); // Stop auto-slide temporarily
+            nextImage();
+            autoSlide = setInterval(nextImage, intervalTime); // Restart auto-slide
+        });
+
+        document.querySelector('.prev').addEventListener('click', () => {
+            clearInterval(autoSlide); // Stop auto-slide temporarily
+            index = (index - 1 + images.length) % images.length;
+            updateCarousel();
+            autoSlide = setInterval(nextImage, intervalTime); // Restart auto-slide
+        });
+        document.querySelector('.dropdown-btn').addEventListener('click', (event) => {
+        const dropdownContent = event.target.nextElementSibling;
+        dropdownContent.style.display =
+            dropdownContent.style.display === 'block' ? 'none' : 'block';
+        });
+
+    </script>
+</head>
+<body>
+
+    <header class="header">
+        <div class="logo">🎟️ FlickTickets</div>
+        
+        <section class="search-section">
+            <input type="text" placeholder="Search" class="search-bar">
+        </section>
+        
+        <nav class="nav">
+          <a href="#">Movies</a>
+          <a href="#">Sports</a>
+          <a href="#">Concerts</a>
+          <a href="#">Comedy</a>
+          <a href="#">Plays</a>
+        </nav>
+        
+        <div class="icons">
+          <a href="/search.html">
+              <button class="icon-btn">🌎</button>
+          </a>
+          <a href="/profile.html">
+              <button class="icon-btn">👤</button>
+          </a>
+          <div class="dropdown">
+              <button class="icon-btn dropdown-btn">☰</button>
+              <div class="dropdown-content">
+                  <a href="/abc.html">Logout</a>
+              </div>
+          </div>
+      </div>
+        </div>
+      </header>
+    <div class="carousel">
+        <button class="prev">&#10094;</button>
+        <div class="carousel-images">
+            <img src="/flick-tickets-images/the-jungle-book.jpg" alt="Image 1">
+            <img src="/flick-tickets-images/the-wild-robot-movie.jpeg" alt="Image 2">
+            <img src="/flick-tickets-images/venom-movie.png" alt="Image 3">
+        </div>
+        <button class="next">&#10095;</button>
+    </div>
+
+    <div class="categories">
+        <div class="category">
+            <img src="movies_icon.png" alt="Movies Icon">
+            <span>Movies</span>
+        </div>
+        <div class="category">
+            <img src="sports_icon.png" alt="Sports Icon">
+            <span>Sports</span>
+        </div>
+        <div class="category">
+            <img src="events_icon.png" alt="Events Icon">
+            <span>Events</span>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+        <nav>
+          <a href="#">Home</a> |
+          <a href="#">About Us</a> |
+          <a href="#">Terms & Conditions</a> |
+          <a href="#">FAQ</a> |
+          <a href="#">Contact Us</a>
+        </nav>
+      </footer>
+</body>
+</html>

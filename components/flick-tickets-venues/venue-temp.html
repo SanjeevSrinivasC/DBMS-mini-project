@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venues for Movies and Events</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 50px;
+        }
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #222;
+            color: #fff;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 0.5rem;
+            font-weight: 500;
+        }
+        .nav {
+            margin-left: auto;
+        }
+        .icons span {
+            margin-left: 1rem;
+            cursor: pointer;
+        }
+        .footer {
+            margin-top: 35px;
+            width: 100%;
+            padding: 1rem;
+            background-color: #222;
+            color: #fff;
+            text-align: center;
+        }
+        .footer nav a {
+            color: #aaa;
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+        .footer nav a:hover {
+            color: #fff;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #007BFF;
+            padding-bottom: 5px;
+        }
+        .venue-list {
+            list-style: none;
+            padding: 0;
+        }
+        .venue-item {
+            background-color: #e9e9e9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: background-color 0.3s;
+        }
+        .venue-item:hover {
+            background-color: #d9d9d9;
+        }
+        .venue-item button {
+            font-size: 1em;
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .venue-item button:hover {
+            background-color: #0056b3;
+        }
+        .venue-item .info {
+            flex: 1;
+        }
+        .venue-item .info .name {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .venue-item .info .address {
+            margin-top: 5px;
+            font-weight: normal;
+        }
+        .main-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .main-header h1 {
+            font-size: 2em;
+            margin: 0;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🎟️ FlickTickets</div>
+        <nav class="nav">
+            <a href="#">Movies</a>
+            <a href="#">Sports</a>
+            <a href="#">Concerts</a>
+            <a href="#">Comedy</a>
+            <a href="#">Plays</a>
+        </nav>
+        <div class="icons">
+            <span>🔍</span>
+            <span>👤</span>
+            <span>☰</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <header class="main-header">
+            <h1>Venues for Movies and Events</h1>
+        </header>
+
+        <ul class="venue-list">
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">PVR Cinemas</span>
+                    <span class="address">123 Movie Lane, Mumbai, Maharashtra</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Cinepolis</span>
+                    <span class="address">456 Film Street, Delhi, Delhi</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Inox Cinemas</span>
+                    <span class="address">789 Cinema Road, Bengaluru, Karnataka</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Carnival Cinemas</span>
+                    <span class="address">321 Film Avenue, Hyderabad, Telangana</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Big Cinemas</span>
+                    <span class="address">654 Movie Boulevard, Kolkata, West Bengal</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Narendra Modi Stadium</span>
+                    <span class="address">Motera, Ahmedabad, Gujarat</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Salt Lake Stadium</span>
+                    <span class="address">Sector V, Salt Lake, Kolkata, West Bengal</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Jawaharlal Nehru Stadium</span>
+                    <span class="address">New Delhi, Delhi</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Eden Gardens</span>
+                    <span class="address">Kolkata, West Bengal</span>
+                </div>
+                <button>View Details</button>
+            </li>
+            <li class="venue-item">
+                <div class="info">
+                    <span class="name">Indira Gandhi Indoor Stadium</span>
+                    <span class="address">New Delhi, Delhi</span>
+                </div>
+                <button>View Details</button>
+            </li>
+        </ul>
+    </div>
+
+    <footer class="footer">
+        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+        <nav>
+            <a href="#">Home</a> |
+            <a href="#">About Us</a> |
+            <a href="#">Terms & Conditions</a> |
+            <a href="#">FAQ</a> |
+            <a href="#">Contact Us</a>
+        </nav>
+    </footer>
+</body>
+</html>

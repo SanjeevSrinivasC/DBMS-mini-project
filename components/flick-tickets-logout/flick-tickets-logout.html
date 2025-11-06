@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #8a2be2, #00bfff);
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .thank-you {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    .contact {
+      font-size: 1rem;
+      margin-bottom: 40px;
+    }
+
+    .arrow {
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(10px);
+      }
+    }
+
+    .card {
+      background: white;
+      color: #333;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .card-text {
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #8a2be2;
+      color: white;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #6f1bb7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🎟️ FlickTickets</div>
+    <div class="thank-you">Thanks for booking with us!</div>
+    <div class="message">If you have any questions, feel free to give us a call.</div>
+    <div class="contact">📞 (91) 9141104511</div>
+    <div class="arrow">⬇</div>
+  </div>
+  <div class="card">
+    <div class="card-title">Book Again</div>
+    <div class="card-text">
+      Click here to head to the homepage
+    </div>
+    <a href="/home.html" class="button">home</a>
+  </div>
+</body>
+</html>

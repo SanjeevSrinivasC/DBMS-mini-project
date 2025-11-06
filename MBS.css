@@ -1,0 +1,125 @@
+/* Basic reset and body styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header styling */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 1.8rem;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem;
+    font-weight: 500;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+/* Main content styling */
+main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.listings-section {
+    background-color: #fff;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.listings-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+/* Grid layout for listings */
+.listings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+/* Styling for individual item cards */
+.listing-card {
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    overflow: hidden; /* Ensures border-radius is respected by children */
+}
+
+.listing-card h3 {
+    font-size: 1.2rem;
+    background-color: #f9f9f9;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.listing-card .details {
+    padding: 1rem;
+    font-size: 0.95rem;
+}
+
+.listing-card .details p {
+    margin-bottom: 0.5rem;
+}
+
+.listing-card .details strong {
+    color: #555;
+}
+
+.listing-card .book-btn {
+    display: block;
+    width: calc(100% - 2rem); /* 100% minus padding */
+    margin: 0 1rem 1rem;
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.listing-card .book-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #333;
+    color: #aaa;
+    margin-top: 2rem;
+}

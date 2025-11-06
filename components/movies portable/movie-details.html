@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <style>
+        /* ... (all your existing CSS is unchanged) ... */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+        .header { box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
+        .logo { font-size: 1.5rem; font-weight: bold; }
+        .logo a { color: inherit; text-decoration: none; }
+        .nav { margin-left: auto; }
+        .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
+        .icons { display: flex; align-items: center; }
+        .icons span { margin-left: 1rem; cursor: pointer; }
+        .footer { box-sizing: border-box; margin-top: 35px; width: 100%; padding: 1rem; background-color: #222; color: #fff; text-align: center; }
+        .footer nav a { color: #aaa; text-decoration: none; margin: 0 0.5rem; }
+        .details-container { max-width: 900px; margin: 2rem auto; padding: 2rem; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: flex; gap: 2rem; }
+        .movie-poster { flex: 1; max-width: 40%; }
+        .movie-poster img { width: 100%; border-radius: 8px; }
+        .movie-info { flex: 2; text-align: left; }
+        .movie-info h1 { color: #333; margin-top: 0; margin-bottom: 0.5rem; }
+        .movie-info .language { font-size: 1.1rem; font-weight: bold; color: #555; margin-bottom: 1rem; }
+        .movie-info .summary { font-size: 1rem; color: #444; line-height: 1.6; margin: 0.5rem 0; }
+        .shows-container { max-width: 900px; margin: 2rem auto; padding: 1rem 2rem 2rem 2rem; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: left; }
+        .show-item { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 1rem; border-bottom: 1px solid #eee; }
+        .show-item:last-child { border-bottom: none; }
+        .show-info { flex: 3; }
+        .show-info .venue-name { font-size: 1.2rem; font-weight: bold; color: #333; }
+        .show-info .city-screen { font-size: 1rem; color: #555; }
+        .show-time { flex: 2; font-size: 1.1rem; font-weight: bold; color: #4CAF50; }
+        .show-price { flex: 1; font-size: 1.1rem; font-weight: bold; color: #333; }
+        .show-booking { flex: 2; display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+        .show-booking input { width: 60px; padding: 8px; font-size: 1rem; text-align: center; border-radius: 5px; border: 1px solid #ccc; }
+        .book-btn { padding: 10px 15px; font-size: 1rem; font-weight: bold; color: #fff; background-color: #222; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        .book-btn:hover { background-color: #444; }
+        #error-message { color: red; text-align: center; margin: 1rem 0; }
+    </style>
+</head>
+<body>
+    
+    <!-- Header (unchanged) -->
+    <header class="header">
+        <div class="logo">
+            <a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
+        </div>
+        <nav class="nav">
+            <a href="/components/movies portable/MOVIES1.html">Movies</a>
+            <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+            <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
+        </nav>
+        <div class="icons">
+            <span>🔍</span>
+            <a href="/components/flick-tickets-login/flick-tickets-login.html" id="user-icon-link">
+                <span>👤</span>
+            </a>
+            <span>☰</span>
+        </div>
+    </header>
+    
+    <div id="movie-details-container" class="details-container">
+        <!-- JavaScript will render movie details here -->
+        <p>Loading movie details...</p>
+    </div>
+
+    <div class="shows-container">
+        <h2>Available Shows</h2>
+        <div id="shows-list">
+            <!-- JavaScript will render the list of shows here -->
+        </div>
+        <p id="error-message" style="display: none;"></p>
+    </div>
+
+    <!-- Footer (unchanged) -->
+    <footer class="footer">
+        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+        <nav>
+          <a href="#">Home</a> |
+          <a href="#">About Us</a> |
+          <a href="#">Terms & Conditions</a> |
+          <a href="#">FAQ</a> |
+          <a href="#">Contact Us</a>
+        </nav>
+    </footer>
+
+    <!-- Auth script (unchanged) -->
+    <script src="/components/flick-tickets-login/flick-tickets-auth.js"></script>
+    
+    <!-- UPDATED SCRIPT for this page -->
+    <script>
+        // --- ** THIS IS THE FIX for the login check ** ---
+        function bookShow(showId, price, title, venue, time) {
+            
+            // 1. Check for login
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const errorEl = document.getElementById('error-message');
+            
+            if (!isLoggedIn) {
+                errorEl.textContent = 'You must be logged in to book. Redirecting to login...';
+                errorEl.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = '/components/flick-tickets-login/flick-tickets-login.html';
+                }, 2000);
+                return; // Stop the booking
+            }
+
+            // 2. If logged in, proceed
+            const ticketCountEl = document.getElementById(`tickets-${showId}`);
+            const ticketCount = parseInt(ticketCountEl.value, 10);
+            
+            if (ticketCount < 1) {
+                errorEl.textContent = 'Please select at least 1 ticket.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            // 3. Save details to localStorage
+            const bookingDetails = {
+                type: 'movie',
+                id: showId, 
+                name: `${title} (${venue} - ${time})`,
+                tickets: ticketCount,
+                pricePerTicket: price,
+                totalPrice: price * ticketCount
+            };
+            
+            localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
+
+            // 4. Redirect to payment
+            window.location.href = '/components/flick-tickets-payments/flick-tickets-payments.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const movieId = params.get('id');
+            
+            const detailsContainer = document.getElementById('movie-details-container');
+            const showsListContainer = document.getElementById('shows-list');
+
+            if (!movieId) {
+                detailsContainer.innerHTML = '<h1>Error</h1><p>No movie ID provided. Please go back and select a movie.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/movie-details/${movieId}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    const { movie, shows } = result.data;
+                    
+                    detailsContainer.innerHTML = `
+                        <div class="movie-poster">
+                            <img src="${movie.ImageURL || 'https://placehold.co/400x600/222/fff?text=Movie'}" alt="${movie.Title}">
+                        </div>
+                        <div class="movie-info">
+                            <h1 id="movie-title">${movie.Title}</h1>
+                            <div class="language">${movie.Language}</div>
+                            <div class="summary">
+                                <p>${movie.Summary || 'No summary available.'}</p>
+                            </div>
+                        </div>
+                    `;
+
+                    if (shows.length > 0) {
+                        showsListContainer.innerHTML = ''; // Clear "loading"
+                        shows.forEach(show => {
+                            const showTime = new Date(show.StartTime);
+                            const formattedTime = showTime.toLocaleTimeString('en-US', {
+                                hour: '2-digit', minute: '2-digit'
+                            });
+                            const formattedDate = showTime.toLocaleDateString('en-US', {
+                                month: 'short', day: 'numeric'
+                            });
+
+                            const showElement = document.createElement('div');
+                            showElement.className = 'show-item';
+                            showElement.innerHTML = `
+                                <div class="show-info">
+                                    <div class="venue-name">${show.VenueName}</div>
+                                    <div class="city-screen">${show.CityName} | ${show.ScreenInfo}</div>
+                                </div>
+                                <div class="show-time">
+                                    ${formattedDate}<br>${formattedTime}
+                                </div>
+                                <div class="show-price">
+                                    ₹${show.Price.toFixed(2)}
+                                </div>
+                                <div class="show-booking">
+                                    <input type="number" id="tickets-${show.ShowID}" value="1" min="1" max="10">
+                                    <button class="book-btn" onclick="bookShow(${show.ShowID}, ${show.Price}, '${movie.Title}', '${show.VenueName}', '${formattedTime}')">
+                                        Book
+                                    </button>
+                                </div>
+                            `;
+                            showsListContainer.appendChild(showElement);
+                        });
+                    } else {
+                        showsListContainer.innerHTML = '<p>No available shows for this movie.</p>';
+                    }
+
+                } else {
+                    detailsContainer.innerHTML = `<h1>Error</h1><p>${result.message}</p>`;
+                }
+            } catch (error) {
+                console.error('Failed to load movie details:', error);
+                detailsContainer.innerHTML = '<h1>Error</h1><p>Failed to load movie details. Please try again.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

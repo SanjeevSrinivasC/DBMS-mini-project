@@ -1,0 +1,214 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #222;
+    color: #fff;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav a {
+    color: #fff;
+    text-decoration: none;
+    margin:0 0.5rem;
+    font-weight: 500;
+    
+}
+
+.nav{
+    margin-left: auto;
+}
+
+.icons span {
+    margin-left: 1rem;
+    cursor: pointer;
+}
+
+.search-section {
+    margin-left: auto; 
+    font-size: 1.1rem;
+    width: 300px;
+}
+
+.search-bar {
+    padding: 10px 20px;
+
+    width: 500px;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+    outline: none;
+    
+}
+
+/* I removed your old .carousel and .carousel-item styles
+  as they were conflicting with the slideshow.
+*/
+
+.categories {
+    display:flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.category {
+    text-align: center;
+    color: #222;
+}
+
+.category img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 0.5rem;
+}
+
+.footer {
+    width: 100%;
+    padding: 1rem;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+}
+
+.footer nav a {
+    color: #aaa;
+    text-decoration: none;
+    margin: 0 0.5rem;
+}
+
+.footer nav a:hover {
+    color: #fff;
+}
+
+
+/* ===============================================
+===            FIXED CAROUSEL CSS           ===
+===============================================
+*/
+
+/* Slideshow container */
+.slideshow-container {
+    position: relative;
+    max-width: 1000px; /* Set a max-width for the slideshow */
+    margin: auto;      /* Center it on the page */
+    overflow: hidden;
+}
+
+/* Hide all slides by default */
+.slide {
+    display: none;
+    position: relative;
+}
+
+/* Fading animation */
+.fade {
+    animation: fade 1.5s;
+}
+
+@keyframes fade {
+    from { opacity: 0.4 }
+    to { opacity: 1 }
+}
+
+/* Image styling */
+.slide img {
+    width: 100%; /* Make image fill the container */
+    border-radius: 10px;
+    /* Removed margin-left: 350px */
+}
+
+/* Caption text */
+.caption {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Next and previous buttons */
+.prev, .next {
+    position: absolute;
+    top: 50%; /* Position arrows in the vertical middle */
+    
+    /* This pulls them back up to be *perfectly* centered */
+    transform: translateY(-50%); 
+    
+    width: auto;
+    padding: 16px; /* Replaced your large top/bottom padding */
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    cursor: pointer;
+    border-radius: 3px;
+    user-select: none;
+}
+
+.next {
+    right: 0; /* Pin to the right */
+    border-radius: 3px 0 0 3px;
+    /* Removed margin-right: 260px */
+}
+.prev{
+    left: 0; /* Pin to the left */
+    border-radius: 0 3px 3px 0;
+    /* Removed margin-left: 350px */
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+
+/* --- DOTS --- */
+.dots {
+    text-align: center; /* Center the dots */
+    padding: 10px 0; /* Add some spacing above and below the dots */
+}
+
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 5px; /* Add spacing between dots */
+    background-color: #bbb; /* Gray color for inactive dots */
+    border-radius: 50%; /* Make dots circular */
+    display: inline-block;
+    cursor: pointer;
+}
+
+.dot.active {
+    background-color: #717171; /* Darker color for active dot */
+}
+
+.dot:hover {
+    background-color: #717171; /* Change color on hover */
+}
+
+/* --- LOGO LINK --- */
+.logo a {
+    color: inherit; /* Makes the link use the parent's color (white, in this case) */
+    text-decoration: none; /* Removes the underline */
+}
