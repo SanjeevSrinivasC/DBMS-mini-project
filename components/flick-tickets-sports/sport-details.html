@@ -4,170 +4,122 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Match Details</title>
+
     <style>
-        /* ... (all your existing CSS is unchanged) ... */
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-        .header { box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
+        .header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
         .logo { font-size: 1.5rem; font-weight: bold; }
         .logo a { color: inherit; text-decoration: none; }
-        .nav { margin-left: auto; }
-        .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
-        .icons { display: flex; align-items: center; }
-        .icons span { margin-left: 1rem; cursor: pointer; }
-        .footer { box-sizing: border-box; margin-top: 35px; width: 100%; padding: 1rem; background-color: #222; color: #fff; text-align: center; }
-        .footer nav a { color: #aaa; text-decoration: none; margin: 0 0.5rem; }
+        .nav a { color: #fff; text-decoration: none; margin: 0 0.5rem; font-weight: 500; }
         .details-container { max-width: 900px; margin: 2rem auto; padding: 2rem; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: flex; gap: 2rem; }
-        .event-image { flex: 1; max-width: 40%; }
         .event-image img { width: 100%; border-radius: 8px; }
-        .event-info { flex: 2; text-align: left; }
-        .event-info h1 { color: #333; margin-top: 0; margin-bottom: 0.5rem; }
-        .event-info .venue { font-size: 1.2rem; font-weight: bold; color: #555; margin-bottom: 1rem; }
-        .event-info .details p { font-size: 1.1rem; color: #444; line-height: 1.6; margin: 0.5rem 0; }
-        .booking-box { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee; }
-        .booking-box label { font-size: 1.1rem; font-weight: bold; margin-right: 1rem; }
-        .booking-box input[type="number"] { width: 70px; padding: 8px; font-size: 1.1rem; border-radius: 5px; border: 1px solid #ccc; }
-        .proceed-btn { display: inline-block; margin-left: 1.5rem; padding: 12px 25px; font-size: 1.1rem; font-weight: bold; color: #fff; background-color: #4CAF50; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease; }
+        .booking-box { margin-top: 2rem; border-top: 1px solid #eee; padding-top: 1.5rem; }
+        .proceed-btn { padding: 12px 25px; font-size: 1.1rem; background-color: #4CAF50; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
         .proceed-btn:hover { background-color: #45a049; }
+        .footer { margin-top: 40px; padding: 1rem; background-color: #222; color: #fff; text-align: center; }
     </style>
 </head>
 <body>
-    
-    <!-- Header (unchanged) -->
-    <header class="header">
-        <div class="logo">
-            <a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
-        </div>
-        <nav class="nav">
-            <a href="/components/movies portable/MOVIES1.html">Movies</a>
-            <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
-            <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
-        </nav>
-        <div class="icons">
-            <span>🔍</span>
-            <a href="/components/flick-tickets-login/flick-tickets-login.html" id="user-icon-link">
-                <span>👤</span>
-            </a>
-            <span>☰</span>
-        </div>
-    </header>
-    
-    <div id="event-details-container" class="details-container">
-        <!-- JavaScript will render content here -->
-        <p>Loading match details...</p>
-    </div>
 
-    <!-- Footer (unchanged) -->
-    <footer class="footer">
-        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
-        <nav>
-          <a href="#">Home</a> |
-          <a href="#">About Us</a> |
-          <a href="#">Terms & Conditions</a> |
-          <a href="#">FAQ</a> |
-          <a href="#">Contact Us</a>
-        </nav>
-    </footer>
+<header class="header">
+    <div class="logo"><a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟 FlickTickets</a></div>
+    <nav class="nav">
+        <a href="/components/movies portable/MOVIES1.html">Movies</a>
+        <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+        <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
+    </nav>
+</header>
 
-    <!-- Auth script (unchanged) -->
-    <script src="/components/flick-tickets-login/flick-tickets-auth.js"></script>
-    
-    <!-- UPDATED SCRIPT for this page -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const params = new URLSearchParams(window.location.search);
-            const matchId = params.get('id');
-            const container = document.getElementById('event-details-container');
+<div id="event-details-container" class="details-container">
+    <p>Loading match details...</p>
+</div>
 
-            if (!matchId) {
-                container.innerHTML = '<h1>Error</h1><p>No match ID provided. Please go back and select a match.</p>';
+<footer class="footer">
+    <p>Copyright © 2024 FlickTickets</p>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const params = new URLSearchParams(window.location.search);
+    const matchId = params.get('id');
+    const container = document.getElementById('event-details-container');
+
+    if (!matchId) {
+        container.innerHTML = "<h2>Error</h2><p>No match selected.</p>";
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/sport-details/${matchId}`);
+        const result = await res.json();
+
+        if (!result.success) {
+            container.innerHTML = "<h2>Error</h2><p>Unable to load match details.</p>";
+            return;
+        }
+
+        const match = result.data;
+        const name = `${match.Team1ID} vs ${match.Team2ID}`;
+
+        container.innerHTML = `
+            <div class="event-image">
+                <img src="${match.ImageURL || 'https://placehold.co/400x400'}" alt="${name}">
+            </div>
+            <div class="event-info">
+                <h1>${name}</h1>
+                <p><strong>Venue:</strong> ${match.VenueName}, ${match.CityName}</p>
+                <p><strong>Date:</strong> ${new Date(match.StartTime).toLocaleDateString()}</p>
+                <p><strong>Time:</strong> ${new Date(match.StartTime).toLocaleTimeString()}</p>
+                <p><strong>Price per Ticket:</strong> ₹${match.Price}</p>
+
+                <div class="booking-box">
+                    <label>Tickets:</label>
+                    <input type="number" id="ticket-count" value="1" min="1" max="10">
+                    <button id="proceed-btn" class="proceed-btn">Proceed to Pay</button>
+                </div>
+                <p id="error-message" style="color:red; display:none;"></p>
+            </div>
+        `;
+
+        document.getElementById("proceed-btn").addEventListener("click", () => {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            const errorEl = document.getElementById("error-message");
+
+            if (!isLoggedIn) {
+                errorEl.textContent = "Login required. Redirecting to login...";
+                errorEl.style.display = "block";
+                setTimeout(() => window.location.href = "/components/flick-tickets-login/flick-tickets-login.html", 1500);
                 return;
             }
 
-            try {
-                const response = await fetch(`/api/sport-details/${matchId}`);
-                const result = await response.json();
-
-                if (result.success) {
-                    const match = result.data;
-                    const eventTime = new Date(match.StartTime);
-                    const formattedDate = eventTime.toLocaleDateString('en-US', {
-                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-                    });
-                    const formattedTime = eventTime.toLocaleTimeString('en-US', {
-                        hour: '2-digit', minute: '2-digit'
-                    });
-
-                    container.innerHTML = `
-                        <div class="event-image">
-                            <img src="${match.ImageURL || 'https://placehold.co/400x400/222/fff?text=Sport'}" alt="${match.Team1ID} vs ${match.Team2ID}">
-                        </div>
-                        <div class="event-info">
-                            <h1>${match.Team1ID} vs ${match.Team2ID}</h1>
-                            <div class="venue">${match.VenueName} - ${match.CityName}</div>
-                            
-                            <div class="details">
-                                <p><strong>Date:</strong> ${formattedDate}</p>
-                                <p><strong>Time:</strong> ${formattedTime}</p>
-                                <p><strong>Price per ticket:</strong> ₹${match.Price.toFixed(2)}</p>
-                            </div>
-                            
-                            <div class="booking-box">
-                                <label for="ticket-count">Number of Tickets:</label>
-                                <input type="number" id="ticket-count" value="1" min="1" max="10">
-                                <button id="proceed-btn" class="proceed-btn">Proceed to Pay</button>
-                            </div>
-                            <p id="error-message" style="color: red; display: none;"></p>
-                        </div>
-                    `;
-
-                    // --- ** THIS IS THE FIX for the login check ** ---
-                    document.getElementById('proceed-btn').addEventListener('click', () => {
-                        
-                        // 1. Check for login
-                        const isLoggedIn = localStorage.getItem('isLoggedIn');
-                        const errorEl = document.getElementById('error-message');
-                        
-                        if (!isLoggedIn) {
-                            errorEl.textContent = 'You must be logged in to book. Redirecting to login...';
-                            errorEl.style.display = 'block';
-                            setTimeout(() => {
-                                window.location.href = '/components/flick-tickets-login/flick-tickets-login.html';
-                            }, 2000);
-                            return; // Stop the booking
-                        }
-
-                        // 2. If logged in, proceed
-                        const ticketCount = document.getElementById('ticket-count').value;
-                        if (ticketCount < 1) {
-                            errorEl.textContent = 'Please select at least 1 ticket.';
-                            errorEl.style.display = 'block';
-                            return;
-                        }
-
-                        // 3. Save details to localStorage
-                        const bookingDetails = {
-                            type: 'sport',
-                            id: matchId,
-                            name: `${match.Team1ID} vs ${match.Team2ID}`,
-                            tickets: parseInt(ticketCount, 10),
-                            pricePerTicket: match.Price,
-                            totalPrice: match.Price * ticketCount
-                        };
-                        
-                        localStorage.setItem('bookingDetails', JSON.stringify(bookingDetails));
-
-                        // 4. Redirect to payment
-                        window.location.href = '/components/flick-tickets-payments/flick-tickets-payments.html';
-                    });
-
-                } else {
-                    container.innerHTML = `<h1>Error</h1><p>${result.message}</p>`;
-                }
-            } catch (error) {
-                console.error('Failed to load match details:', error);
-                container.innerHTML = '<h1>Error</h1><p>Failed to load match details. Please try again.</p>';
+            const tickets = parseInt(document.getElementById("ticket-count").value);
+            if (tickets < 1) {
+                errorEl.textContent = "Select at least 1 ticket.";
+                errorEl.style.display = "block";
+                return;
             }
+
+            const bookingDetails = {
+                type: "sport",
+                id: matchId,
+                name,
+                tickets,
+                pricePerTicket: match.Price,
+                totalPrice: tickets * match.Price
+            };
+
+            localStorage.setItem("bookingDetails", JSON.stringify(bookingDetails));
+
+            // ✅ Redirect to payment page (correct page now)
+            window.location.href = "/components/flick-tickets-payments/flick-tickets-payments.html";
         });
-    </script>
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = "<h2>Error loading page</h2>";
+    }
+});
+</script>
+
 </body>
 </html>

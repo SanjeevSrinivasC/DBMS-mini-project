@@ -5,127 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Payment - FlickTickets</title>
     <style>
-        /* All your existing CSS is perfect, no changes here */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .payment-container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 450px;
-            overflow: hidden;
-        }
-        .payment-header {
-            background-color: #222;
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        .payment-header .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-        }
-        .payment-header .amount {
-            font-size: 1.2rem;
-        }
-        .tab-buttons {
-            display: flex;
-            background-color: #eee;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 1rem;
-            border: none;
-            background-color: #eee;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: #777;
-            transition: background-color 0.3s, color 0.3s;
-            border-bottom: 3px solid transparent;
-        }
-        .tab-btn.active {
-            background-color: #fff;
-            color: #222;
-            border-bottom: 3px solid #222;
-        }
-        .payment-body {
-            padding: 2rem;
-        }
-        .payment-content {
-            display: none;
-        }
-        .payment-content.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .input-group {
-            margin-bottom: 1.25rem;
-            text-align: left;
-        }
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box; 
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .row {
-            display: flex;
-            gap: 15px;
-        }
-        .row .input-group {
-            flex: 1;
-        }
-        .pay-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2a2a2a;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            margin-top: 1rem;
-        }
-        .pay-btn:hover {
-            background-color: #444;
-        }
-        .pay-btn:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
-        /* For showing errors from the server */
-        #error-message {
-            color: red;
-            font-size: 0.9rem;
-            text-align: center;
-            margin-top: 1rem;
-            display: none; /* Hidden by default */
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .payment-container { background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); width: 100%; max-width: 450px; overflow: hidden; }
+        .payment-header { background-color: #222; color: white; padding: 1.5rem; text-align: center; }
+        .payment-header .logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .payment-header .amount { font-size: 1.2rem; }
+        .tab-buttons { display: flex; background-color: #eee; }
+        .tab-btn { flex: 1; padding: 1rem; border: none; background-color: #eee; cursor: pointer; font-size: 0.9rem; font-weight: bold; color: #777; transition: background-color 0.3s, color 0.3s; border-bottom: 3px solid transparent; }
+        .tab-btn.active { background-color: #fff; color: #222; border-bottom: 3px solid #222; }
+        .payment-body { padding: 2rem; }
+        .payment-content { display: none; }
+        .payment-content.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .input-group { margin-bottom: 1.25rem; text-align: left; }
+        .input-group label { display: block; margin-bottom: 0.5rem; color: #555; font-size: 0.9rem; }
+        .input-group input { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        .row { display: flex; gap: 15px; }
+        .row .input-group { flex: 1; }
+        .pay-btn { width: 100%; padding: 14px; border: none; border-radius: 5px; background-color: #2a2a2a; color: white; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: background-color 0.3s ease; margin-top: 1rem; }
+        .pay-btn:hover { background-color: #444; }
+        .pay-btn:disabled { background-color: #aaa; cursor: not-allowed; }
+        #error-message { color: red; font-size: 0.9rem; text-align: center; margin-top: 1rem; display: none; }
+        #summary { font-size: 0.9rem; color: #555; margin-bottom: 1rem; text-align: center; }
     </style>
 </head>
 <body>
@@ -133,25 +34,18 @@
     <div class="payment-container">
         <div class="payment-header">
             <div class="logo">🎟️ FlickTickets</div>
-            <!-- 
-              FIX 1: The amount now has an ID and defaults to 0.00
-              The script below will update this.
-            -->
             <div class="amount">Total Amount: <strong id="total-amount">₹0.00</strong></div>
         </div>
 
-        <div class="tab-buttons">
-            <button class="tab-btn active" onclick="showPayment('card')">Credit/Debit Card</button>
-            <button class="tab-btn" onclick="showPayment('upi')">UPI</button>
-        </div>
-
         <div class="payment-body">
-            <!-- 
-              FIX 2: The 'onsubmit' now calls our *new* handlePayment function
-            -->
-            <form id="payment-form" onsubmit="handlePayment(event)">
+            <div id="summary"></div>
 
-                <!-- Card Payment Panel -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="showPayment('card')">Credit/Debit Card</button>
+                <button class="tab-btn" onclick="showPayment('upi')">UPI</button>
+            </div>
+
+            <form id="payment-form" onsubmit="handlePayment(event)">
                 <div id="card" class="payment-content active">
                     <div class="input-group">
                         <label for="card-number">Card Number</label>
@@ -173,7 +67,6 @@
                     </div>
                 </div>
 
-                <!-- UPI Payment Panel -->
                 <div id="upi" class="payment-content">
                     <div class="input-group">
                         <label for="upi-id">Enter UPI ID</label>
@@ -186,122 +79,107 @@
                 
                 <button type="submit" id="pay-btn" class="pay-btn">Pay Now</button>
                 <p id="error-message"></p>
-
             </form>
         </div>
     </div>
 
-    <!-- 
-      FIX 3: This is the new, complete script block.
-      It includes your old tab-switching function AND
-      the new logic for dynamic pricing and booking.
-    -->
     <script>
         let currentMethod = 'card';
-        let bookingDetails = null; // Store booking details globally on this page
+        let bookingDetails = null;
 
-        // --- This function runs when the page loads ---
         document.addEventListener('DOMContentLoaded', () => {
-            const bookingData = localStorage.getItem('bookingDetails');
-            const amountElement = document.getElementById('total-amount');
-            const payButton = document.getElementById('pay-btn');
+            const data = localStorage.getItem('bookingDetails');
+            const amountEl = document.getElementById('total-amount');
+            const summaryEl = document.getElementById('summary');
+            const payBtn = document.getElementById('pay-btn');
 
-            if (bookingData) {
-                // Parse the data from localStorage
-                bookingDetails = JSON.parse(bookingData);
-                
-                // Update the total amount in the header
-                amountElement.textContent = `₹${bookingDetails.totalPrice.toFixed(2)}`;
-            } else {
-                // No booking data found, show an error
-                amountElement.textContent = 'Error';
-                payButton.textContent = 'No Booking Found';
-                payButton.disabled = true;
-                document.getElementById('error-message').textContent = 'Could not find booking details. Please go back and select an event.';
-                document.getElementById('error-message').style.display = 'block';
-            }
-        });
-
-        // --- This is your tab-switching function (unchanged) ---
-        function showPayment(method) {
-            document.querySelectorAll('.payment-content').forEach(el => {
-                el.classList.remove('active');
-                el.querySelectorAll('input').forEach(input => input.required = false);
-            });
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active');
-            });
-            const activeContent = document.getElementById(method);
-            activeContent.classList.add('active');
-            activeContent.querySelectorAll('input').forEach(input => input.required = true);
-            document.querySelector(`.tab-btn[onclick="showPayment('${method}')"]`).classList.add('active');
-            currentMethod = method;
-        }
-        
-        // --- THIS IS THE NEW PAYMENT FUNCTION ---
-        // It now saves to the database *before* faking the payment.
-        async function handlePayment(event) {
-            event.preventDefault(); // Stop the form from submitting
-
-            const payButton = document.getElementById('pay-btn');
-            const errorElement = document.getElementById('error-message');
-            
-            // Check for login status
-            const username = localStorage.getItem('username');
-            if (!username) {
-                errorElement.textContent = 'You must be logged in to make a booking.';
-                errorElement.style.display = 'block';
+            if (!data) {
+                amountEl.textContent = '₹0.00';
+                payBtn.textContent = 'No Booking Found';
+                payBtn.disabled = true;
+                const err = document.getElementById('error-message');
+                err.textContent = 'No booking details found. Please go back and select an item.';
+                err.style.display = 'block';
                 return;
             }
 
-            // 1. Show a processing state
-            payButton.textContent = 'Processing...';
-            payButton.disabled = true;
-            errorElement.style.display = 'none';
+            bookingDetails = JSON.parse(data);
+            amountEl.textContent = `₹${Number(bookingDetails.totalPrice || 0).toFixed(2)}`;
+
+            // Optional: show a small summary for confidence
+            const label = bookingDetails.type === 'movie' ? 'Movie' :
+                          bookingDetails.type === 'event' ? 'Event' : 'Sport';
+            const name = bookingDetails.name || '';
+            const tickets = bookingDetails.tickets || 1;
+            const ppt = Number(bookingDetails.pricePerTicket || 0);
+            summaryEl.innerHTML = `
+                <div><strong>${label}</strong>${name ? ': ' + name : ''}</div>
+                <div>Tickets: ${tickets} @ ₹${ppt.toFixed(2)}</div>
+            `;
+        });
+
+        function showPayment(method) {
+            document.querySelectorAll('.payment-content').forEach(el => {
+                el.classList.remove('active');
+                el.querySelectorAll('input').forEach(inp => inp.required = false);
+            });
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            const active = document.getElementById(method);
+            active.classList.add('active');
+            active.querySelectorAll('input').forEach(inp => inp.required = true);
+            document.querySelector(`.tab-btn[onclick="showPayment('${method}')"]`).classList.add('active');
+
+            currentMethod = method;
+        }
+
+        async function handlePayment(e) {
+            e.preventDefault();
+            const payBtn = document.getElementById('pay-btn');
+            const errEl = document.getElementById('error-message');
+
+            const username = localStorage.getItem('username');
+            if (!username) {
+                errEl.textContent = 'You must be logged in to make a booking.';
+                errEl.style.display = 'block';
+                return;
+            }
+            if (!bookingDetails) {
+                errEl.textContent = 'No booking details found.';
+                errEl.style.display = 'block';
+                return;
+            }
+
+            payBtn.disabled = true;
+            payBtn.textContent = 'Processing…';
+            errEl.style.display = 'none';
 
             try {
-                // 2. Call the new /api/book endpoint
-                const response = await fetch('/api/book', {
+                const resp = await fetch('/api/book', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        bookingDetails: bookingDetails // Send the data from localStorage
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, bookingDetails })
                 });
+                const result = await resp.json().catch(() => ({}));
 
-                const result = await response.json();
-
-                if (response.ok) {
-                    // 3. SUCCESS!
-                    // Clear the stored details so you can't book it twice
-                    localStorage.removeItem('bookingDetails');
-                    
-                    // 4. Simulate payment processing
-                    payButton.textContent = 'Payment Successful!';
-                    setTimeout(() => {
-                        // 5. Redirect to the success page
-                        window.location.href = '/components/flick-tickets-payments/flick-tickets-booking-sucess.html';
-                    }, 1500);
-                
-                } else {
-                    // 6. FAILED (e.g., server error)
-                    errorElement.textContent = result.message || 'Booking failed. Please try again.';
-                    errorElement.style.display = 'block';
-                    payButton.textContent = 'Pay Now';
-                    payButton.disabled = false;
+                if (!resp.ok || !result.success) {
+                    throw new Error(result && (result.detail || result.message) || 'Booking failed');
                 }
-            } catch (error) {
-                console.error('Payment error:', error);
-                errorElement.textContent = 'An error occurred. Please check your connection.';
-                errorElement.style.display = 'block';
-                payButton.textContent = 'Pay Now';
-                payButton.disabled = false;
+
+                // Clear cart and show success
+                localStorage.removeItem('bookingDetails');
+                payBtn.textContent = 'Payment Successful!';
+                setTimeout(() => {
+                    window.location.href = '/components/flick-tickets-payments/flick-tickets-booking-sucess.html';
+                }, 1200);
+
+            } catch (err) {
+                errEl.textContent = err.message || 'An error occurred. Please try again.';
+                errEl.style.display = 'block';
+                payBtn.disabled = false;
+                payBtn.textContent = 'Pay Now';
             }
         }
     </script>
-
 </body>
 </html>

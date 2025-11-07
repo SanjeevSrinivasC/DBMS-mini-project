@@ -1,211 +1,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile - FlickTickets</title>
-    <style>
-        /* Your standard header/footer styles */
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
-        .header { box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
-        .logo { font-size: 1.5rem; font-weight: bold; }
-        .logo a { color: inherit; text-decoration: none; }
-        .nav { margin-left: auto; }
-        .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
-        .icons { display: flex; align-items: center; }
-        .icons span { margin-left: 1rem; cursor: pointer; }
-        .footer { box-sizing: border-box; margin-top: 35px; width: 100%; padding: 1rem; background-color: #222; color: #fff; text-align: center; position: fixed; bottom: 0; }
-        .footer nav a { color: #aaa; text-decoration: none; margin: 0 0.5rem; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Profile - FlickTickets</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+    .header { box-sizing: border-box; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #222; color: #fff; }
+    .logo { font-size: 1.5rem; font-weight: bold; }
+    .logo a { color: inherit; text-decoration: none; }
+    .nav { margin-left: auto; }
+    .nav a { color: #fff; text-decoration: none; margin:0 0.5rem; font-weight: 500; }
+    .icons { display: flex; align-items: center; }
+    .icons span { margin-left: 1rem; cursor: pointer; }
+    .footer { box-sizing: border-box; margin-top: 35px; width: 100%; padding: 1rem; background-color: #222; color: #fff; text-align: center; position: fixed; bottom: 0; }
 
-        /* --- NEW STYLES for this page --- */
-        .page-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding-bottom: 100px; /* Room for footer */
-        }
-        .profile-container, .booking-container {
-            margin-bottom: 2rem;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: left;
-        }
-        .profile-container h1, .booking-container h2 {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid #eee;
-            margin: 0;
-            color: #333;
-        }
-        #user-details-card {
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-        #user-details-card p {
-            font-size: 1.1rem;
-            color: #555;
-            margin: 0;
-        }
-        #user-details-card p strong {
-            display: block;
-            color: #222;
-            font-size: 0.9rem;
-            margin-bottom: 0.25rem;
-            text-transform: uppercase;
-        }
-        
-        /* Booking Table */
-        #booking-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        #booking-table th, #booking-table td {
-            padding: 1rem 2rem;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-        }
-        #booking-table th {
-            background-color: #f9f9f9;
-            color: #555;
-            font-size: 0.9rem;
-        }
-        #booking-table td {
-            color: #333;
-        }
-        #booking-table .item-name {
-            font-weight: bold;
-        }
-        #no-bookings {
-            padding: 2rem;
-            text-align: center;
-            color: #777;
-        }
-    </style>
+    .page-container { max-width: 900px; margin: 2rem auto; padding-bottom: 100px; }
+    .profile-container, .booking-container { margin-bottom: 2rem; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); text-align: left; }
+    .profile-container h1, .booking-container h2 { padding: 1.5rem 2rem; border-bottom: 1px solid #eee; margin: 0; color: #333; }
+    #user-details-card { padding: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    #user-details-card p { font-size: 1.1rem; color: #555; margin: 0; }
+    #user-details-card p strong { display: block; color: #222; font-size: 0.9rem; margin-bottom: 0.25rem; text-transform: uppercase; }
+
+    #booking-table { width: 100%; border-collapse: collapse; }
+    #booking-table th, #booking-table td { padding: 1rem 2rem; text-align: left; border-bottom: 1px solid #eee; }
+    #booking-table th { background-color: #f9f9f9; color: #555; font-size: 0.9rem; }
+    #booking-table td { color: #333; }
+    #booking-table .item-name { font-weight: bold; }
+    #no-bookings { padding: 2rem; text-align: center; color: #777; }
+  </style>
 </head>
 <body>
-    
-    <!-- Header -->
-    <header class="header">
-        <div class="logo">
-            <a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
-        </div>
-        <nav class="nav">
-            <a href="/components/movies portable/MOVIES1.html">Movies</a>
-            <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
-            <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
-        </nav>
-        <div class="icons">
-            <!-- This will be filled by auth.js -->
-        </div>
-    </header>
-    
-    <div class="page-container">
-        <!-- User Details Section -->
-        <div class="profile-container">
-            <h1>My Profile</h1>
-            <div id="user-details-card">
-                <p><strong>Username:</strong> <span id="prof-username">Loading...</span></p>
-                <p><strong>Full Name:</strong> <span id="prof-name">Loading...</span></p>
-                <p><strong>Email:</strong> <span id="prof-email">Loading...</span></p>
-                <p><strong>Phone:</strong> <span id="prof-phone">Loading...</span></p>
-            </div>
-        </div>
+  <header class="header">
+    <div class="logo">
+      <a href="/components/flick-tickets-homepage/flick-tickets-home.html">🎟️ FlickTickets</a>
+    </div>
+    <nav class="nav">
+      <a href="/components/movies portable/MOVIES1.html">Movies</a>
+      <a href="/components/flick-tickets-sports/flick-tickets-sports-temp.html">Sports</a>
+      <a href="/components/flick-tickets-events/flick-tickets-events.html">Events</a>
+    </nav>
+    <div class="icons"><!-- filled by auth.js --></div>
+  </header>
 
-        <!-- Booking History Section -->
-        <div class="booking-container">
-            <h2>Booking History</h2>
-            <table id="booking-table">
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Tickets</th>
-                        <th>Total Price</th>
-                        <th>Date Booked</th>
-                    </tr>
-                </thead>
-                <tbody id="booking-history-body">
-                    <!-- JS will fill this -->
-                </tbody>
-            </table>
-            <p id="no-bookings" style="display: none;">You have no booking history.</p>
-        </div>
+  <div class="page-container">
+    <div class="profile-container">
+      <h1>My Profile</h1>
+      <div id="user-details-card">
+        <p><strong>Username:</strong> <span id="prof-username">Loading...</span></p>
+        <p><strong>Full Name:</strong> <span id="prof-name">Loading...</span></p>
+        <p><strong>Email:</strong> <span id="prof-email">Loading...</span></p>
+        <p><strong>Phone:</strong> <span id="prof-phone">Loading...</span></p>
+      </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
-        <nav>
-          <a href="#">Home</a> |
-          <a href="#">About Us</a> |
-          <a href="#">Terms & Conditions</a> |
-          <a href="#">FAQ</a> |
-          <a href="#">Contact Us</a>
-        </nav>
-    </footer>
+    <div class="booking-container">
+      <h2>Booking History</h2>
+      <table id="booking-table">
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Tickets</th>
+            <th>Total Price</th>
+            <th>Date Booked</th>
+          </tr>
+        </thead>
+        <tbody id="booking-history-body"></tbody>
+      </table>
+      <p id="no-bookings" style="display:none;">You have no booking history.</p>
+    </div>
+  </div>
 
-    <!-- Auth script (to build the header) -->
-    <script src="/components/flick-tickets-login/flick-tickets-auth.js"></script>
-    
-    <!-- NEW SCRIPT for this page -->
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            
-            // 1. Check for login
-            const username = localStorage.getItem('username');
-            if (!username) {
-                // If not logged in, kick to login page
-                window.location.href = '/components/flick-tickets-login/flick-tickets-login.html';
-                return;
-            }
+  <footer class="footer">
+    <p>Copyright © 2024, FlickTickets. All rights reserved.</p>
+    <nav>
+      <a href="#">Home</a> |
+      <a href="#">About Us</a> |
+      <a href="#">Terms & Conditions</a> |
+      <a href="#">FAQ</a> |
+      <a href="#">Contact Us</a>
+    </nav>
+  </footer>
 
-            try {
-                // 2. Fetch profile data from the new API
-                const response = await fetch(`/api/my-profile?username=${username}`);
-                const result = await response.json();
+  <!-- Build the header icons, etc. -->
+  <script src="/components/flick-tickets-login/flick-tickets-auth.js"></script>
 
-                if (result.success) {
-                    const { userDetails, bookingHistory } = result.data;
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // 1) Auth check
+      const username = localStorage.getItem('username');
+      if (!username) {
+        window.location.href = '/components/flick-tickets-login/flick-tickets-login.html';
+        return;
+      }
 
-                    // 3. Populate User Details Card
-                    document.getElementById('prof-username').textContent = userDetails.Username;
-                    document.getElementById('prof-name').textContent = userDetails.Name;
-                    document.getElementById('prof-email').textContent = userDetails.Email;
-                    document.getElementById('prof-phone').textContent = userDetails.Phone || 'N/A';
+      // 2) Resolve API base so the call hits your Node server regardless of where this HTML is served from
+      const API_BASE = (location.origin.includes(':3000')) ? location.origin : 'http://localhost:3000';
 
-                    // 4. Populate Booking History Table
-                    const tbody = document.getElementById('booking-history-body');
-                    const noBookingsEl = document.getElementById('no-bookings');
+      try {
+        const resp = await fetch(`${API_BASE}/api/my-profile?username=${encodeURIComponent(username)}`);
+        if (!resp.ok) {
+          const txt = await resp.text().catch(() => '');
+          throw new Error(`HTTP ${resp.status} ${resp.statusText} — ${txt}`);
+        }
+        const result = await resp.json();
 
-                    if (bookingHistory.length === 0) {
-                        noBookingsEl.style.display = 'block';
-                    } else {
-                        tbody.innerHTML = ''; // Clear any loading text
-                        bookingHistory.forEach(booking => {
-                            const bookingDate = new Date(booking.BookingTime);
-                            const formattedDate = bookingDate.toLocaleDateString('en-IN', {
-                                day: 'numeric', month: 'short', year: 'numeric'
-                            });
+        if (!result.success) {
+          document.getElementById('user-details-card').innerHTML = `<p>${result.message || 'Failed to load profile.'}</p>`;
+          return;
+        }
 
-                            const row = tbody.insertRow();
-                            row.innerHTML = `
-                                <td class="item-name">${booking.ItemName}</td>
-                                <td>${booking.NoOfTickets}</td>
-                                <td>₹${booking.TotalPrice.toFixed(2)}</td>
-                                <td>${formattedDate}</td>
-                            `;
-                        });
-                    }
+        const { userDetails, bookingHistory } = result.data;
 
-                } else {
-                    document.getElementById('user-details-card').innerHTML = `<p>${result.message}</p>`;
-                }
+        // User card
+        document.getElementById('prof-username').textContent = userDetails.Username || '—';
+        document.getElementById('prof-name').textContent = userDetails.Name || '—';
+        document.getElementById('prof-email').textContent = userDetails.Email || '—';
+        document.getElementById('prof-phone').textContent = userDetails.Phone || 'N/A';
 
-            } catch (error) {
-                console.error('Failed to load profile:', error);
-                document.getElementById('user-details-card').innerHTML = '<p>Error loading profile. Please try again.</p>';
-            }
+        // Bookings
+        const tbody = document.getElementById('booking-history-body');
+        const noBookingsEl = document.getElementById('no-bookings');
+
+        if (!Array.isArray(bookingHistory) || bookingHistory.length === 0) {
+          noBookingsEl.style.display = 'block';
+          tbody.innerHTML = '';
+          return;
+        }
+
+        tbody.innerHTML = '';
+        bookingHistory.forEach(b => {
+          const bookingDate = b.BookingTime ? new Date(b.BookingTime) : null;
+          const formattedDate = bookingDate
+            ? bookingDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+            : '—';
+
+          const total = Number(b.TotalPrice);
+          const totalFmt = Number.isFinite(total) ? `₹${total.toFixed(2)}` : '₹—';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td class="item-name">${b.ItemName || '—'}</td>
+            <td>${b.NoOfTickets ?? '—'}</td>
+            <td>${totalFmt}</td>
+            <td>${formattedDate}</td>
+          `;
+          tbody.appendChild(tr);
         });
-    </script>
+      } catch (err) {
+        console.error('Failed to load profile:', err);
+        document.getElementById('user-details-card').innerHTML = '<p>Error loading profile. Please try again.</p>';
+      }
+    });
+  </script>
 </body>
 </html>
