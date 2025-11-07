@@ -16,7 +16,6 @@
             padding: 20px;
             box-sizing: border-box;
         }
-        /* We use one container for both login and admin views */
         .admin-container {
             background-color: #fff;
             padding: 2rem 3rem;
@@ -24,7 +23,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 100%;
-            max-width: 450px;
+            max-width: 800px; 
         }
         .admin-container h1 {
             color: #333;
@@ -70,7 +69,13 @@
         .login-btn:hover, .admin-btn:hover {
             background-color: #444;
         }
-        /* Specific button colors */
+        
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
         .admin-btn.movie { background-color: #007bff; }
         .admin-btn.sport { background-color: #4CAF50; }
         .admin-btn.event { background-color: #ff9800; }
@@ -79,17 +84,16 @@
         .admin-btn.sport:hover { background-color: #45a049; }
         .admin-btn.event:hover { background-color: #e68900; }
 
-        #error-message, #form-message {
+        #error-message, #form-message, #delete-message {
             margin-top: 1rem;
-            display: none; /* Hidden by default */
+            display: none;
             font-weight: bold;
         }
         #error-message { color: red; }
-        #form-message.success { color: green; }
-        #form-message.error { color: red; }
+        #form-message.success, #delete-message.success { color: green; }
+        #form-message.error, #delete-message.error { color: red; }
 
         
-        /* This is the view that is hidden by default */
         #admin-dashboard {
             display: none;
         }
@@ -104,11 +108,50 @@
             text-align: center;
             margin-bottom: 1.5rem;
         }
+
+        .manage-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            text-align: left;
+        }
+        .item-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 0.5rem;
+        }
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .item-row:last-child {
+            border-bottom: none;
+        }
+        .item-name {
+            font-weight: bold;
+            color: #333;
+        }
+        .delete-btn {
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: white;
+            background-color: #dc3545; /* Red */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
 
-    <!-- This container holds both views -->
     <div class="admin-container">
 
         <!-- VIEW 1: LOGIN (Visible by default) -->
@@ -136,16 +179,39 @@
             <h1>Dashboard</h1>
             <p>Welcome, <strong>admin1</strong>. What would you like to do?</p>
             
+            <div id="form-container">
+                <!-- JS will fill this -->
+            </div>
+
             <div class="button-grid">
                 <button class="admin-btn movie" onclick="showAddForm('Movie')">Add New Movie</button>
                 <button class="admin-btn sport" onclick="showAddForm('Sport')">Add New Sport</button>
                 <button class="admin-btn event" onclick="showAddForm('Event')">Add New Event</button>
             </div>
+            
+            <p id="delete-message"></p>
 
-            <!-- This is where the "Add" forms will appear -->
-            <div id="form-container">
-                <!-- JS will fill this -->
+            <div class="manage-section">
+                <h2>Manage Movies</h2>
+                <div id="movie-list" class="item-list">
+                    <p>Loading...</p>
+                </div>
             </div>
+
+            <div class="manage-section">
+                <h2>Manage Sports</h2>
+                <div id="sport-list" class="item-list">
+                    <p>Loading...</p>
+                </div>
+            </div>
+
+            <div class_manage-section">
+                <h2>Manage Events</h2>
+                <div id="event-list" class="item-list">
+                    <p>Loading...</p>
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -164,21 +230,137 @@
             if (username === 'admin1' && password === 'pw') {
                 document.getElementById('login-view').style.display = 'none';
                 document.getElementById('admin-dashboard').style.display = 'block';
+                loadAdminData();
             } else {
                 errorMessage.style.display = 'block';
             }
         });
 
-        // --- 2. DASHBOARD SCRIPT (NOW WITH FETCH!) ---
+        // --- 2. DASHBOARD SCRIPT ---
         
         const formContainer = document.getElementById('form-container');
+        const deleteMessage = document.getElementById('delete-message');
+        const movieContainer = document.getElementById('movie-list');
+        const sportContainer = document.getElementById('sport-list');
+        const eventContainer = document.getElementById('event-list');
+        
+        let availableVenues = []; // Cache venues
 
-        // This function dynamically builds a form
-        function showAddForm(type) {
+        async function loadAdminData() {
+            try {
+                // Fetch all 4 lists at the same time
+                const [movieRes, sportRes, eventRes, venueRes] = await Promise.all([
+                    fetch('/api/movies'),
+                    fetch('/api/sports'),
+                    fetch('/api/events'),
+                    fetch('/api/venues') // Fetch the venues
+                ]);
+                
+                const movies = await movieRes.json();
+                const sports = await sportRes.json();
+                const events = await eventRes.json();
+                const venues = await venueRes.json();
+
+                if (venues.success) {
+                    availableVenues = venues.data; // Save venues to use in forms
+                }
+
+                // Render each list
+                renderList(movies.data, movieContainer, 'movie');
+                renderList(sports.data, sportContainer, 'sport');
+                renderList(events.data, eventContainer, 'event');
+
+            } catch (err) {
+                console.error("Failed to load admin data", err);
+                movieContainer.innerHTML = '<p class="error">Failed to load movies.</p>';
+                sportContainer.innerHTML = '<p class="error">Failed to load sports.</p>';
+                eventContainer.innerHTML = '<p class="error">Failed to load events.</p>';
+            }
+        }
+
+        function renderList(items, container, type) {
+            container.innerHTML = ''; 
+            
+            if (!items || items.length === 0) {
+                container.innerHTML = '<p>No items found.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                let id, name;
+                if (type === 'movie') {
+                    id = item.MovieID;
+                    name = item.Title;
+                } else if (type === 'sport') {
+                    id = item.MatchID;
+                    name = item.Team1ID + (item.Team2ID ? ` vs ${item.Team2ID}` : '');
+                } else if (type === 'event') {
+                    id = item.EventID;
+                    name = item.Name;
+                }
+
+                const itemRow = document.createElement('div');
+                itemRow.className = 'item-row';
+                itemRow.id = `${type}-${id}`; 
+                
+                itemRow.innerHTML = `
+                    <span class="item-name">${name}</span>
+                    <button class="delete-btn" onclick="deleteItem('${type}', ${id})">Delete</button>
+                `;
+                container.appendChild(itemRow);
+            });
+        }
+
+        async function deleteItem(type, id) {
+            try {
+                const response = await fetch(`/api/delete/${type}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+                
+                deleteMessage.className = result.success ? 'success' : 'error';
+                deleteMessage.textContent = result.message;
+                deleteMessage.style.display = 'block';
+
+                if (result.success) {
+                    document.getElementById(`${type}-${id}`).remove();
+                }
+
+            } catch (err) {
+                console.error('Delete error:', err);
+                deleteMessage.className = 'error';
+                deleteMessage.textContent = 'A network error occurred.';
+                deleteMessage.style.display = 'block';
+            }
+        }
+
+        // *** THIS FUNCTION IS NOW ASYNC ***
+        async function showAddForm(type) {
             
             let formHtml = `<h2>Add New ${type}</h2>`;
             let apiEndpoint = '';
             let formId = '';
+
+            // --- NEW: Build venue options dropdown ---
+            let venueOptions = '<option value="">-- Select a Venue (Optional) --</option>';
+            if (availableVenues.length > 0) {
+                availableVenues.forEach(venue => {
+                    venueOptions += `<option value="${venue.VenueID}">${venue.Name}</option>`;
+                });
+            } else {
+                // This will happen if the /api/venues call failed earlier
+                venueOptions = '<option value="">-- Could not load venues --</option>';
+            }
+            const venueDropdown = `
+                <div class="input-group">
+                    <label for="venueId">Venue</label>
+                    <select id="venueId">
+                        ${venueOptions}
+                    </select>
+                </div>
+            `;
+            // --- End new section ---
 
             if (type === 'Movie') {
                 apiEndpoint = '/api/add/movie';
@@ -231,6 +413,7 @@
                                 <option value="OTH">Others</option>
                             </select>
                         </div>
+                        ${venueDropdown} <!-- ADDED VENUE DROPDOWN -->
                         <div class="input-group">
                             <label for="price">Price</label>
                             <input type="number" id="price" min="0" value="1000">
@@ -257,9 +440,10 @@
                                 <option value="AP">Amusement Park</option>
                                 <option value="SC">Stand-up Comedy</option>
                                 <option value="MC">Concert</option>
-                                <option value_="WS">Workshop</option>
+                                <option value="WS">Workshop</option> 
                             </select>
                         </div>
+                        ${venueDropdown} <!-- ADDED VENUE DROPDOWN -->
                         <div class="input-group">
                             <label for="price">Price</label>
                             <input type="number" id="price" min="0" value="500">
@@ -273,12 +457,10 @@
                 `;
             }
             
-            // Add a container for success/error messages
             formHtml += `<p id="form-message"></p>`;
             formContainer.innerHTML = formHtml;
             
-            // --- THIS IS THE NEW PART ---
-            // Add a listener to the new form that was just created
+            // Add a listener to the new form
             document.getElementById(formId).addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const formMessage = document.getElementById('form-message');
@@ -300,14 +482,16 @@
                         team2: document.getElementById('team2').value,
                         category: document.getElementById('category').value,
                         price: document.getElementById('price').value,
-                        imageUrl: document.getElementById('imageUrl').value
+                        imageUrl: document.getElementById('imageUrl').value,
+                        venueId: document.getElementById('venueId').value // Get the new venueId
                     };
                 } else if (type === 'Event') {
                     body = {
                         name: document.getElementById('name').value,
                         category: document.getElementById('category').value,
                         price: document.getElementById('price').value,
-                        imageUrl: document.getElementById('imageUrl').value
+                        imageUrl: document.getElementById('imageUrl').value,
+                        venueId: document.getElementById('venueId').value // Get the new venueId
                     };
                 }
 
@@ -328,6 +512,7 @@
                         formMessage.textContent = result.message;
                         formMessage.className = 'success';
                         document.getElementById(formId).reset(); // Clear the form
+                        loadAdminData(); // Refresh all lists
                     } else {
                         formMessage.textContent = result.message;
                         formMessage.className = 'error';
